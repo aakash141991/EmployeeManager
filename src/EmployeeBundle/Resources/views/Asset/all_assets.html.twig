@@ -1,0 +1,111 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+
+
+{% block body %}
+<div class="row top-container">
+	<div class=" top-header">
+			Your Assets List
+		</div>
+		<div class="message-wrapper col col-md-12 ">
+					<div id="desc" class="show-asset-details">
+		</div>
+				</div>
+	<div class="col col-md-12 table-container">
+			<table class="display-assets-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Employee Id</th>
+				<th>Asset Type</th>
+				<th>Asset ID</th>
+				<th>Assigned Date</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for asset in assets %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ asset.employeeId }}</td>
+       			 	<td>{{ asset.assetType }} <span data="{{ asset.assetTypeId}}" class="glyphicon glyphicon-fullscreen more-details-asset"></span></td>
+       			 	<td>{{ asset.assetId }}</td>
+       			 	<td>{{ asset.fromDate }}</td>
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+			<div id="nav"></div>
+	</div>
+	
+				
+	
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+			.message-wrapper{
+				background-color: #8af58a;
+		    margin-bottom: 0px;
+		    margin-top: 10px;
+		    font-weight: 550;
+			}
+		.display-assets-table{
+			margin-top: 2%;
+			    width: 90%;
+
+		}
+		.display-assets-table tr th{
+			height: 50px;
+			background-color: darkcyan;
+			text-align: center;
+		}
+		.display-assets-table tr td{
+			
+			text-align: center;
+			border-bottom: 1px solid darkcyan;
+			height:50px;
+		}
+		#nav{
+
+			width:80%;
+			text-align: right;
+			margin-top:10px;
+		}
+		#nav a{
+			margin:5px;
+		}
+		.more-details-asset:hover{
+			cursor: pointer;
+
+		}
+		
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+
+        
+        $('.more-details-asset').click(function(){
+        	var id= $(this).attr('data');
+        	var Url=location.origin + "/auth/getAssetDetails/"+id;
+        	$.ajax({url: Url, success: function(result){
+        		console.log(result.assetDescription);
+        		$('#desc').html('');
+        		$('#desc').append('<div >'+result.type+'</div><div>'+result.assetDescription +'</div>');
+    			}});
+
+        });
+
+
+
+});
+</script>
+{% endblock %}

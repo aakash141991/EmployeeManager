@@ -1,0 +1,100 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Update Employee Payment
+		</div>
+
+				{% if employee %}
+			<div class="row">
+						<div class="col-md-12 employee-details-container">
+								<table class="display-data-table" id="">
+								<thead>
+									<tr>
+									<th>Employee Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Designation</th>
+								</tr>
+								</thead>
+								<tbody>
+					       			 <tr>
+					       			 	<td>{{ employee.name }}</td>
+					       			 	<td>{{ employee.email }}</td>
+					       			 	<td>{{ employee.phone}}</td>
+					       			 	<td>{{ employee.designation}}</td>
+					       			 </tr>
+							
+								</tbody>
+							</table>
+						</div>
+
+				{% if payment %}
+				<div class="col col-md-6 last-row-col">
+						<div class="display-payment-heading">
+							Payment Details
+						</div>
+						<form action="" method="post">
+							<table class="display-data-table " >
+							<tbody>
+								
+							<tr><td>Basic Pay</td><td  ><input style="text-align:right;" type="number" name="basic_salary" value="{{payment.basicSalary}}"></td></tr>
+							<tr><td>HRA</td><td><input style="text-align:right;" type="number" name="hra" value="{{payment.hra}}"></td></tr>
+							<tr><td>Special Allowance</td><td><input style="text-align:right;" type="number" name="special_allowance" value="{{payment.specialAllowance}}"></td></tr>
+							<tr><td>Conveyance Allowance</td><td><input  style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.conveyanceAllowance}}"></td></tr>
+							<tr><td>PF Contribution</td><td><input style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.pfContribution}}"></td></tr>
+							<tr><td>Income Tax Deduction</td><td><input  style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.incomeTax}}"></td></tr>
+								
+							</tbody>
+						</table>
+						<div class="update-button-container"><button class="button-primary update-payment-button" type=
+						'submit'>Update  </button></div>
+						
+						</form>
+						
+
+				</div>
+			{% else %}
+				<div class="col col-md-4 last-row-col">
+					<div class="display-payment-heading">
+							Payment Details
+						</div>
+						<div class="no-data-text"> Data Not Availaible</div>
+						<div class="add-payment-container"><button class="button-primary Add-payment-button" type=
+						'submit'>Add Payment  </button></div>
+				</div>
+			{% endif %}
+
+</div>
+{% endif %}
+{% endblock %}
+
+ {% block stylesheets %}
+  	<style type="text/css">
+	.display-payment-heading{
+  		margin-top:20px;
+  		height: 30px;
+            background-color: #f3e5dd;
+            text-align: center;
+            font-size:2rem;
+            padding-top:0px;
+            font-weight:600;
+            width:90%;
+
+
+  	}
+  	.no-data-text{
+		color:#de5a5a;
+		margin-top:20px;
+		text-align: center;
+	}  
+	.update-button-container{
+		text-align: right;
+	}
+	.add-payment-container{
+		margin-top: 20px;
+		text-align: center;
+	}
+
+	  	</style>
+  {% endblock %}

@@ -1,0 +1,46 @@
+
+<link rel="stylesheet" type="text/css" href="{{ asset('css/loggedin-header.css') }}">
+
+<div class="row header-row">
+  <div class="col col-md-2">
+      <div class="company-logo">
+          <img src="{{asset('nettantra-logo.png')}}" alt="Logo">
+      </div>
+  </div>
+  <div class="col col-md-4">
+      
+  </div>
+  <div class="col col-md-6 header-link-container">
+     <ul>
+     	<li class="top-header-link dashboard">
+     		<a href="#" class="top-header-link-a">Dashboard<br></a>
+     	</li>
+     	<li class="top-header-link see-Account">
+     		<a href="#" class="top-header-link-a ">Account </a>
+     		
+     	</li>
+      <li class="top-header-link logout">
+        <a href="#" class="top-header-link-a">Logout </a>
+        
+      </li>
+     	<li class="top-header-link-menu open-mobile-menu-link">
+     		<span class="top-header-link-a open-mobile-menu glyphicon glyphicon-menu-hamburger"></span>
+     	</li>
+     </ul>
+  </div>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function () {
+		$(".logout").click(function(){
+        window.location= location.origin + "/auth/logout";
+		});
+    $(".dashboard").click(function(){
+        window.location= location.origin + "/auth/dashboard";
+    });
+     $(".see-Account").click(function(){
+        window.location= location.origin + "/auth/my-account";
+    });
+    
+});
+</script>

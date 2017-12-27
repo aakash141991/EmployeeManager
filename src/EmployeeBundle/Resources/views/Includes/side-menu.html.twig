@@ -1,0 +1,147 @@
+<link rel="stylesheet" type="text/css" href="{{ asset('css/side-menu.css') }}">
+<script src="{{ asset('js/side-menu.js') }}"></script>
+{% if app.user is not null %}
+
+  {% for role in app.user.roles  %}
+  	{% if role == 'ROLE_MANAGER' %}
+      <script type="text/javascript">
+      			$(document).ready(function () {
+						$('.manager-role').css('display','block');
+				});
+				</script>
+     {% endif %}
+     {% if role == 'ROLE_ASSET_MANAGER' %}
+      <script type="text/javascript">
+      			$(document).ready(function () {
+						$('.asset-manager-role').css('display','block');
+						$('.service-role').css('display','block');
+				});
+				</script>
+     {% endif %}
+      {% if role == 'ROLE_PF' %}
+      <script type="text/javascript">
+      			$(document).ready(function () {
+						$('.pf-role').css('display','block');
+						$('.service-role').css('display','block');
+				});
+				</script>
+     {% endif %}
+      {% if role == 'ROLE_HR' %}
+      <script type="text/javascript">
+      			$(document).ready(function () {
+						$('.hr-role').css('display','block');
+						$('.service-role').css('display','block');
+				});
+				</script>
+     {% endif %}
+     {% if role == 'ROLE_ATTENDANCE_MANAGER' %}
+      <script type="text/javascript">
+      			$(document).ready(function () {
+						$('.attendance-manager-role').css('display','block');
+						$('.service-role').css('display','block');
+				});
+				</script>
+     {% endif %}
+
+    
+       
+  {% endfor %}
+{% endif %}
+          
+         
+<div class="side-menu-wrapper">
+	<div class="side-menu-title">
+		<img class="menu-image" src="{{asset('multiple-users-silhouette.png')}}">
+	</div>
+	<div class="side-menu-contents">
+		<div class="side-content-wrap">
+			<button type="button" class="side-list-header side-menu-dashboard-link"><span class="menu-icon glyphicon glyphicon-home" ></span>Dashboard </button>
+			<button type="button" class="side-list-header" data-toggle="collapse" data-target="#leaves"><span class="menu-icon glyphicon glyphicon-list-alt" ></span>Leaves <span class="glyphicon glyphicon-chevron-down " style="left:41%;"></span></button>
+			  <div id="leaves" class="collapse out">
+			     <ul>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-apply-leave" href="#" >Apply leave</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link leave-history" href="#" >Leave History</a>
+				     </li>
+				     <li class="side-list-item-collapsed manager-role">
+				     	<a class="side-list-item-link respond-leave-request" href="#" >Approve /Reject Leave</a>
+				     </li>
+			     </ul>
+  				</div>	
+
+  			<button type="button" class="side-list-header" data-toggle="collapse" data-target="#assets"><span class="menu-icon 	glyphicon glyphicon-folder-close" ></span>Assets <span class="glyphicon glyphicon-chevron-down" style="left:42%;"></span></button>
+  			<div id="assets" class="collapse out">
+			     <ul>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-see-assets" href="#" >See your Assets</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-apply-asset" href="#" >Apply new Asset</a>
+				     </li>
+				     <li class="side-list-item-collapsed asset-manager-role">
+				     	<a class="side-list-item-link respond-asset-request" href="#" >Approve /Reject Asset</a>
+				     </li>
+			     </ul>
+  				</div>	
+
+  				<button type="button" class="side-list-header" data-toggle="collapse" data-target="#payments"><span class="menu-icon glyphicon glyphicon-usd" ></span>Payments <span class="glyphicon glyphicon-chevron-down " style="left:31%;"></span></button>
+  				<div id="payments" class="collapse out">
+			     <ul>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-view-paySlip" href="#" >Pay slips</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-salary-account" href="#" >Salary Account</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link pf-role side-menu-generate-paySlip" href="#" >Generate Pay Slip</a>
+				     </li>
+				     
+				     
+			     </ul>
+  				</div>	
+
+  				<button type="button" class="side-list-header" data-toggle="collapse" data-target="#requests"><span class="menu-icon glyphicon glyphicon-file" ></span>Request <span class="glyphicon glyphicon-chevron-down " style="left:37%;"></span></button>
+  				<div id="requests" class="collapse out">
+			     <ul>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-view-requests" href="#" >See your requests</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-raise-request" href="#" >Raise a request</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-respond-request service-role" href="#" >Serve a request</a>
+				     </li>
+				     
+			     </ul>
+  				</div>
+ 
+  					<button type="button" class="side-list-header hr-role" data-toggle="collapse" data-target="#humanResource"><span class="menu-icon glyphicon glyphicon-pushpin" ></span>HR Action <span class="glyphicon glyphicon-chevron-down " style="left:30%;"></span></button>
+  				<div id="humanResource" class="collapse out">
+			     <ul>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-add-employee" href="#" >Add New Employee</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-update-employee" href="#" >Update / Remove Employee</a>
+				     </li>
+				     
+			     </ul>
+  				</div>
+
+
+  						<button type="button" class="side-list-header manage-attendance-button attendance-manager-role"><span class="menu-icon glyphicon glyphicon-time" ></span>Manage Attendance </button>
+  				
+  				{# end side content wrap #}
+		</div>
+	
+			
+		
+	</div>
+</div>
+<div id="mobile-menu" >
+<div class="glyphicon glyphicon-remove mobile-close-menu"></div>
+</div>

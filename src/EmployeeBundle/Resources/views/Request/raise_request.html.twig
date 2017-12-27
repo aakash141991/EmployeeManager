@@ -1,0 +1,73 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			New Request Ticket
+		</div>
+		<div class="col col-md-12 form-container">
+			{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+			<form action="{{ path('requestTicketSubmit') }}" method="post">
+					<div class="row">
+							<div class="col col-md-6">
+								<div class="form-item-container">
+									<label class="form-item-Label">Employee Id</label>
+									<input class="form-item-input" type="text" name="employeeId" value="{{user.NID}}" readonly></input>
+								</div>
+								<div class="form-item-container">
+									<label class="form-item-Label">Request title</label>
+									<input class="form-item-input" type="text" name="title" required="required" pattern="[A-Za-z0-9]{1,50}" ></input>
+								</div>
+							</div>
+							<div class="col col-md-6">
+								<div class="form-item-container">
+								<label class="form-item-Label">Department</label>
+									<select name="department_id" class="form-input-option"> 
+										<options>
+											{% for department in departments %}
+											<option value="{{ department.id}}">{{ department.departmentName}}</option>
+											{% endfor %}
+										</options>
+									</select>
+								</div>
+
+							</div>
+
+					</div>
+					<div class="row">
+						<div class="form-item-description">
+									<label class="form-item-description-Label">Description</label>
+									<input class="form-item-description-input" type="text" name="description" required="required" pattern="[A-Za-z0-9]{1,200}"  ></input>
+								</div>
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Request</button>
+						</div>
+					</div>
+			</form>
+			
+
+		</div>
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+	.form-item-description{
+		padding:15px;
+	}
+	.form-item-description-input{
+		width: 70%;
+    height: 10rem;
+	}
+	.form-item-description-Label{
+		padding-left: 15px;
+    padding-right: 12px;
+	}
+	</style>
+
+	{% endblock %}

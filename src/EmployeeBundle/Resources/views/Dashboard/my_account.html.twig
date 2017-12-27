@@ -1,0 +1,90 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+	<div class="row top-container">
+
+		<div class="top-header ">My Account</div>
+	</div>
+	<div class="row">
+		<form action="{{path('changeAuthPassword')}}" method="POST">
+			<div class="col col-md-6">
+				{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+				<div class="form-item-container">
+								<label class="form-item-Label">Old Password</label>
+								<input class="form-item-input" type="text" name="oldPassword" required="required"></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">New Password</label>
+								<input class="form-item-input" type="text" name="newPassword" required="required"></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Confirm Password</label>
+								<input class="form-item-input" type="text" name="confirmPassword" required="required"></input>
+							</div>
+			</div>
+			<div class="col col-md-6 ">
+				<button class="button-primary change-password" type="submit">Change</button>
+			</div>
+		</form>
+	</div>
+	<div class="row other-row-type">
+		<div class="top-header ">Other Account Details</div>
+		<table class="display-details-table">
+			<tr>
+				<td>Email : {{user.email}}</td><td>Phone : {{user.phone}}</td>
+			</tr>
+			<tr>
+				<td>Address : {{user.address}}</td><td>Designation : {{user.designation}}</td>
+			</tr>
+		</table>
+		
+	</div>
+	<div class="row">
+						<div class="col-md-12 ">
+							<button class="button-primary update-details" type="button">Update</button>
+						</div>
+					</div>
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+.display-details-table{
+			width:80%;
+			font-size: 2rem;
+		}
+		.display-details-table tr th{
+			
+			background-color: darkcyan;
+			text-align: center;
+		}
+		.display-details-table tr td{
+			
+			text-align: center;
+			border-right: 1px dotted darkcyan;
+			height:50px;
+		}
+		.change-password{
+			margin-top: 10%;
+		}
+		</style>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$(".update-details").click(function(){
+        window.location= location.origin + "/auth/raise-request";
+		});
+   
+    
+});
+</script>
+{% endblock %}

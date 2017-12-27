@@ -1,0 +1,107 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Update Employee
+		</div>
+					<div class="col col-md-12 asset-form-wrapper">
+					<form action="{{ path('updateEmployeeSubmit') }}" method="post">
+					<div class="row">
+						<div class="col col-md-6">
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Id</label>
+								<input class="form-item-input" type="text" name="employeeId" value="{{employee.nID }}" required="required" readonly></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Email</label>
+								<input class="form-item-input" value="{{employee.email}}" type="email" name="email" required="required" ></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Address</label>
+								<input class="form-item-input-address" value="{{employee.address}}" type="text" name="address" required="required" ></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Manager Id</label>
+								<input id="employee_search" value="{{employee.managerNid}}" class="form-item-input" type="text" name="managerNid" required="required" ></input>
+								<div id="suggest"></div>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Date Of Birth</label>
+								<input class="form-item-input date-of-birth" value = {{employee.dateOfBirth | date('Y-m-d')}} type="date" name="dob" required="required" ></input>
+							</div>
+							
+
+
+						</div>
+						<div class="col col-md-6">
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Name</label>
+								<input class="form-item-input" type="text" value="{{employee.name}}" name="name" required="required" ></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Phone</label>
+								<input class="form-item-input" type="number" value="{{employee.phone}}" pattern="[0-9]" name="phone" required="required" ></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Desgnation</label>
+								<select class="form-input-option" name="designation"> 
+									<options>
+										{% for designation in designations %}
+										<option   value="{{ designation.name}}">{{ designation.name}}</option>
+										{% endfor %}
+									</options>
+								</select>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">PAN Number</label>
+								<input class="form-item-input" value="{{employee.panNumber}}" type="text" name="panNumber"  required="required" ></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Date Of Joining</label>
+								<input class="form-item-input" value = {{employee.dateOfJoining | date('Y-m-d')}} type="date" name="doj" required="required" ></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Gender</label>
+								<span class="form-item-input" ><input class="gender_male" type="radio" name="gender"  >Male</input></span>
+								<span class="form-item-input" ><input class="gender_female" type="radio" name="gender"  >Female</input></span>
+								
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Roles</label>
+								<select  multiple class="form-input-option"  name="role[]"> 
+									<options>
+										{% for role in roles %}
+										<option  class="role.roleActionName" value="{{ role.roleActionName}}">{{ role.roleName}}</option>
+										{% endfor %}
+									</options>
+								</select>
+							</div>
+							
+							
+
+
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Update</button>
+						</div>
+					</div>
+					</form>
+				</div> 
+</div>
+{% if employee.gender == 'male' %}
+	<script type="text/javascript">$('.gender_male').attr('checked','checked');</script>
+	{% else %}
+		<script type="text/javascript">$('.gender_female').attr('checked','checked');</script>
+{% endif %}
+
+
+
+{% endblock %}
+{% block stylesheets %}
+<style type="text/css">
+
+
+</style>
+{% endblock %}

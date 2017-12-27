@@ -1,0 +1,76 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+
+
+{% block body %}
+<div class="row top-container">
+	<div class=" top-header">
+			Update Departments
+		</div>
+		<div class="col col-md-12 admin-top-support">
+			<button class="button-primary add-new-department">Add New</button>
+		</div>
+		<div class="col col-md-12 table-container">
+			<table class="display-assets-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>departmentName</th>
+				<th>departmentRole</th>
+				<th>departmentHead</th>
+				<th>Action</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for department in departments %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ department.departmentName }}</td>
+       			 	<td>{{ department.departmentRole }} </td>
+       			 	<td>{{ department.departmentHead }}</td>
+       			 	<td><button class="button-form-type change-department"  data-id="{{department.id}}">update</button> <button data-toggle="modal" data-target="#delete"   data-id="{{department.id}}" class="button-form-type-danger delete-department">Delete</button></td>
+       			 	
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+			<!-- Reject Modal -->	
+			 	<div id="delete" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Delete Department</h4>
+			      </div>
+			      <div class="modal-body">
+			        <p>This Department will be Deleted.</p>
+			      </div>
+			      <div class="modal-footer">
+			      	<button type="button" class="btn button-primary delete-department-confirm" data-dismiss="modal">Delete</button>
+			        <button type="button" class="btn button-primary-danger " data-dismiss="modal">close</button>
+			      </div>
+			    </div>
+
+			  </div>
+			</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.add-new-department').click(function(){
+				window.location = location.origin + "/admin/add-new-department"
+			});
+		
+	});
+	</script>
+{% endblock %}

@@ -1,0 +1,203 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+	<div class="row top-container">
+		<div class="leave-form-header top-header ">Apply Leave</div>
+		<div class="leave-form-container">
+				{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+				<div class="col col-md-8 leave-form-wrapper">
+					<form action="{{ path('applyLeaveSubmit') }}" method="post">
+					<div class="row">
+						<div class="col col-md-6">
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Id</label>
+								<input class="form-item-input" type="text" name="employeeId" value="{{user.NID}}" readonly></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Leave request from</label>
+								<input class="form-item-input" required="required" id="datepicker_1" type="text" name="from_date" ></input>
+							</div>
+
+
+						</div>
+						<div class="col col-md-6">
+							<div class="form-item-container">
+								<label class="form-item-Label">Leave type</label>
+								<select name="leave_type" class="form-input-option"> 
+									<options>
+										{% for type in leaveTypes %}
+										<option value="{{ type.typeName}}">{{ type.typeName}}</option>
+										{% endfor %}
+								</options>
+							</select>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Leave request till</label>
+								<input class="form-item-input" required="required" id="datepicker_2" type="text" name="to_date"></input>
+							</div>
+
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Apply</button>
+						</div>
+					</div>
+					</form>
+				</div> 
+				{#  form wrapper ends #}
+				<div class="col col-md-4 " >
+					<div class="faq-section"><div class="faq-heading">Leaves FAQ's</div>
+					<div class="faq-text-list">
+						<ul>
+							{% for faq in faqs %}
+								<li class="faq-text-item"><a href="/auth/show-Faqs/{{faq.id}}">{{faq.question}}</a></li>
+							{% endfor %}
+						</ul>
+						
+					</div>
+				</div>
+					
+					<div class="show-all-faq-link"><a href="#">Show all FAQ's <span class="glyphicon glyphicon-chevron-right"></span></a></div>
+				</div>
+				
+			
+		</div>
+	</div>
+
+	<div class="row leave-details-container" >
+		<div class="col col-md-3">
+			<div class="total-leave-container">
+					<table class="show-total-table">
+						<thead>
+							<tr  class="table-header">
+								<th>Leave Type</th>
+								<th>Total Alloted</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for key,value in leaveTotal%}
+									<tr class="table-row"><td>{{key}}</td><td>{{value}}</td></tr>
+										{% endfor %}
+							
+						</tbody>
+					</table>
+			</div>
+		</div>
+		<div class="col col-md-3">
+			<div class="available-leave-container">
+					<table class="show-availaible-table">
+						<thead>
+							<tr class="table-header">
+								<th >Total Remaining</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for key,value in leaveRecord %}
+									<tr class="table-row"><td>{{value}}</td></tr>
+										{% endfor %}
+						</tbody>
+					</table>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+
+	 @media screen and  (min-width: 720px) {
+         .available-leave-container{
+				margin-left: -20%;
+			}
+   }
+   	.faq-section{
+   		
+   		width:100%;
+   		height:200px;
+   		max-height:200px;
+   		 overflow-y: scroll;
+    	text-overflow: ellipsis;
+        border-top: 4px black inset;
+        border-left:1px black;
+        background-color: #f3e5dd;
+   	}
+   	.faq-heading{
+   		    font-weight: 600;
+    padding-bottom: 10px;
+    padding-top:5px;
+   	}
+   	.show-all-link{
+   		padding-top: 10px;
+   		padding-bottom: 10px;
+   	}
+   	.show-all-link a{
+   		color:darkcyan;
+   	}
+	.leave-details-container{
+		margin-top: 7%;
+
+	}
+	.available-leave-container, .total-leave-container{
+		padding-top:20px;
+		border-bottom: 1px solid;
+		padding-bottom: 20px;
+		background-color: #f3e5dd;
+	}
+	
+			.table-header th{
+				margin-top: 10px;
+				width:200px;
+				text-align: center;
+				background-color: darkcyan;
+				color: #fff;
+			}
+			.table-row td{
+				padding-top:10px;
+				text-align: center;
+				
+			}
+		.leave-form-container{
+			margin-top: 10px;
+
+		}
+		.leave-form-wrapper{
+			
+		}
+		
+		
+		
+	</style>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+	 $(document).ready(function () { 
+
+       $( "#datepicker_1" ).datepicker({
+			 beforeShowDay: $.datepicker.noWeekends
+			 });
+		$( "#datepicker_2" ).datepicker({
+			 beforeShowDay: $.datepicker.noWeekends,
+			 changeMonth: false
+			 });
+		
+		$( ".show-all-faq-link").click(function(){
+			window.location = location.origin + "/auth/show-Faqs/All";
+		});
+ 
+	 	
+	 	$('.show-total-table ').children('tbody').children('tr:first').css('display','none');
+	 	$('.show-availaible-table ').children('tbody').children('tr:first').css('display','none');
+	 });
+</script>
+{% endblock %}

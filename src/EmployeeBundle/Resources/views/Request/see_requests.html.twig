@@ -1,0 +1,47 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Your Request Tickets
+		</div>
+		
+		<div class="col col-md-12 table-container">
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Request Date</th>
+				<th>Resolved Date</th>
+				<th>Status</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for requestTicket in requestTickets %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ requestTicket.title }}</td>
+       			 	<td>{{ requestTicket.description }}</td>
+       			 	<td>{{ requestTicket.created |date("m/d/Y") }}</td>
+       			 	<td>
+       			 		{% if requestTicket.resolvedDate == NULL %}
+       			 			Not Resolved
+       			 		{% else %}
+       			 			{{ requestTicket.resolvedDate |date("m/d/Y") }}</td>
+       			 		{% endif %}
+
+
+       			 		
+       			 	<td>{{ requestTicket.status }}</td>
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+	</div>
+{% endblock %}
+

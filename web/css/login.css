@@ -1,0 +1,101 @@
+  .login-form-container{
+         border:1px solid darkcyan;
+         
+         height:48rem;
+         box-shadow: 2px;
+         position: relative;
+         box-shadow:0 5px 30px 0 darkcyan;
+         margin-bottom: 44px;
+         }
+
+         .login-main-wrapper{
+         z-index: 20;
+         }
+    
+    .login-logo-container{
+         height:20%;
+         width:100%;
+         text-align: center;
+         margin-top: 10%;
+    }
+    .form-heading-container{
+      height:25%;
+         width:100%;
+         text-align: center;
+         font-size: 3rem;
+         font-weight: 700;
+         color:darkcyan;
+         background-color: #e4f9f9;
+         padding-top: 20px;
+        padding-bottom: 10px;
+        margin-top: 5px;
+    }
+       .admin-form-heading-container{
+      height:25%;
+         width:100%;
+         text-align: center;
+         font-size: 3rem;
+         font-weight: 700;
+         color:darkcyan;
+         background-color: #333;
+         padding-top: 20px;
+        padding-bottom: 10px;
+        margin-top: 5px;
+    }
+    .Email-error-container{
+      height:25%;
+         width:100%;
+         text-align: center;
+         font-size: 3rem;
+         font-weight: 700;
+         color:darkcyan;
+         background-color: #e4f9f9;
+         padding-top: 20px;
+        padding-bottom: 10px;
+        margin-top: 5px;
+        display:none;
+    }
+    .login-input-container{
+      width:100%;
+      padding: 10px;
+      margin-top:15px;
+    }
+    .input-field{
+      width:80%;
+      height: 35px;
+      border:1px solid;
+      border-radius: 50px;
+      border-color: darkcyan;
+      font-size: 2rem;
+      color: darkcyan;
+      font-weight: 700;
+      text-align: center;
+    }
+    .login-input-container{
+      text-align: center;
+    }
+
+    @media screen and (max-width: 420px) {
+         .login-form-container{
+               width:30rem;
+         }
+         .login-main-wrapper{
+            margin-top: 40%;
+         }
+   }
+   @media screen and (min-width: 420px) and (max-width: 720px) {
+         .login-form-container{
+               width:53rem;
+         }
+         .login-main-wrapper{
+            margin-top: 20%;
+         }
+   }
+      @media screen and (min-width: 720px) {
+         .login-form-container{
+               width:50rem;
+         }
+         .login-main-wrapper{
+            margin-top: 10%;
+         }
+   }

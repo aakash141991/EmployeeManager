@@ -1,0 +1,80 @@
+{% extends "EmployeeBundle:layout:layout_loggedout.html.twig" %}
+{% block stylesheets %}
+	 <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css') }}">
+	
+{% endblock %}
+{% block body %}
+	<div class="row login-main-wrapper">
+			<div class="col col-md-8 col-md-offset-3">
+				{# login form container #}
+				<div class="login-form-container">
+					<form action="{{path('adminLogin')}}" id="employee-login-form" method="post">
+
+					<div class="login-logo-container">
+						<img src="{{asset('nettantra-logo.png')}}">
+					</div>
+					{% if error %}
+									<div class="admin-form-heading-container alert-danger">
+											<div class=" "><span class="glyphicon glyphicon-remove message-icon"></span>{{ error.messageKey }}</div>
+									</div>
+								{% else %}
+									<div class="admin-form-heading-container">
+									<span class="welcome-text">Admin Login !</span>
+									</div>
+								
+							     {% endif %}
+					
+					<div class="Email-error-container">
+									<span class=" alert-danger email-error">Entered Email is not Valid.</span>
+					</div>
+					<div class="login-input-container">
+            <span class="glyphicon glyphicon-envelope input-icon"></span>
+						<input type="text" id="username" class="input-field" placeholder="Email PLease" name="_username" value="{{last_username}}">
+					</div>
+					<div class="login-input-container">
+            <span class="glyphicon glyphicon-asterisk input-icon"></span>
+						<input type="password" class="input-field"  placeholder="Password" name="_password">
+					</div>
+					<input type="hidden"  name="formtype" value="admin">
+					<div class="login-input-container">
+						<input type="submit" value="Login" class="button-primary login-button"  name="_submit">
+					</div>
+					</form>
+				</div>
+				{# form container ends #}
+				
+			</div>
+	</div>
+{% endblock %}
+ {% block javascripts %}
+ 	<script type="text/javascript">
+ 	 $(document).ready(function () {
+       function validateEmail(email)
+          {
+           var reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+           if (reg.test(email)){
+           return true; }
+           else{
+           return false;
+           }
+          } 
+
+          $('.login-input-container .login-button').click(function(e){
+            e.preventDefault();
+            var email= document.getElementById("username").value;
+            if(validateEmail(email)){
+              document.getElementById("employee-login-form").submit();
+              $('.form-heading-container').css('display','block');
+               $('.Email-error-container').css('display','none');
+            }else{
+              $('.form-heading-container').css('display','none');
+               $('.Email-error-container').css('display','block');
+              
+              
+            }
+            
+             
+            });
+      });
+</script>
+ {% endblock %}

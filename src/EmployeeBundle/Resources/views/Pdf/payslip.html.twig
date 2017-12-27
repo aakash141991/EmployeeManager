@@ -1,0 +1,70 @@
+{% extends "EmployeeBundle:layout:pdf_layout.html.twig" %}
+
+{% block body %}
+    {# Layout for PDF files #}
+    <div>
+        {% block content %} 
+        	<div class="employee-details" style="border-bottom: 1px solid #ccc;">
+        		<table style="border:none;margin-bottom:10px;">
+        			<tr>
+        			<td style="width:300px;height:20px;">Emp Id.     :   {{employee.nID}}</td>
+        					<td "width:300px;height:20px;"></td>
+        		<td "width:300px;height:20px;">Designation    :   {{employee.designation}}</td>
+        			</tr>
+        			<tr>
+        				<td style="width:300px;height:20px;">Name     :   {{employee.name}}</td>
+        				<td "width:300px;height:20px;"></td>
+        				<td "width:300px;height:20px;">Emp Status    :   {{employee.employeeStatus}}</td>
+        			</tr>
+        		</table>
+        	</div>
+        	<div class="Payments-heading">
+        		<table>
+        			<tr ><td style="width:300px;height:20px;border-bottom:1px solid #ccc;">Earnings</td><td style="width:300px;height:20px;border-bottom:1px solid #ccc;">Deductions</td><td style="width:300px;height:20px;border-bottom:1px solid #ccc;">Other Details</td></tr>
+        		</table>
+
+        	</div>
+        	<div class="payment-details">
+        		<table>
+        			<tr>
+        				<td valign="top" style="width:300px; height:250px;border-right:1px dotted #ccc;">
+
+        					<ul style="list-style:none;">
+        				<li> <div style="width:130px;text-align:left;">Basic Salary:<span style="width:80px;text-align:right;">{{payment.basicSalary}}</span></div> </li>
+        				<li> <div style="width:130px;text-align:left;">House Rent allowance:<span style="width:80px;text-align:right;">{{payment.hra}}</span></div> </li>
+        				<li> <div style="width:130px;text-align:left;">Special Allowance:<span style="width:80px;text-align:right;">{{payment.specialAllowance}}</span></div> </li>
+        				<li> <div style="width:130px;text-align:left;">Conveyance Allowance:<span style="width:80px;text-align:right;">{{payment.conveyanceAllowance}}</span></div> </li>
+        				
+        			</ul>
+
+        				</td>
+
+        		<td  valign="top" style="width:300px; height:250px;border-right:1px dotted #ccc;">
+					<ul style="list-style:none;">
+        				<li> <div style="width:130px;text-align:left;">PF contribution:  <span style="width:80px;text-align:right;">{{payment.pfContribution}}</span></div></li>
+        				<li> <div style="width:130px;text-align:left;">Income Tax: <span style="width:80px;text-align:right;">{{payment.incomeTax}}</span></div> </li>
+        				
+        			</ul>
+
+        				</td>
+
+
+        				<td valign="top" style="width:300px; height:250px;border-right:1px dotted #ccc;">
+
+        				<ul style="list-style:none;">
+        				<li> <div style="text-align:left;">Present Days:<span style="width:80px;text-align:right;">{{attendance.presentDays}}</span></div> </li>
+        				<li> <div style="width:130px;text-align:left;">Date of Joining: <span style="width:80px;text-align:right;">{{employee.dateOfJoining | date('d/m/y')}}</span></div> </li>
+        				<li> <div style="width:130px;text-align:left;">Date of Birth: <span style="width:80px;text-align:right;">{{employee.dateOfBirth | date('d/m/y')}}</span></div> </li>
+        				<li> <div style="width:130px;text-align:left;">PAN number: <span style="width:80px;text-align:right;">{{employee.panNumber}}</span></div> </li>
+        				
+        					</ul>
+
+        				</td>
+        			</tr>
+
+        		</table>
+        		
+
+        {% endblock %}
+    </div>
+{% endblock %}

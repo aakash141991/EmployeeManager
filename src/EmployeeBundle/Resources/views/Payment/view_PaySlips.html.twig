@@ -1,0 +1,120 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+	<div class="row top-container">
+
+		<div class="top-header ">Your Payment Slip</div>
+	</div>
+		<div class="select-radios">
+			<span class="select-radios-input-container"><input class="show-last-two" type="radio" name="payslip-duration" value="current" checked> Show Last Two</span>
+            <span class="select-radios-input-container"><input class="show-all-pays" type="radio" name="payslip-duration" value="All" > Show All</span>
+		</div>
+		<div class="col col-md-12 table-container last-two-pays">
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Month</th>
+				<th>Year</th>
+				<th>Action</th>
+				
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for paySlip in paySlips %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ date('20-'~ paySlip.month ~ '-'~ paySlip.year) | date('M') }}</td>
+       			 	<td>{{ paySlip.year }}</td>
+       			 	<td><button class="button-form-type download-payslip"  data-id="{{paySlip.id}}">Download</button></td>
+       			 	
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+		</div>
+			<div class="col col-md-12 table-container all-pays">
+			<table class="display-data-table" id="displayTableSecond">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Month</th>
+				<th>Year</th>
+				<th>Action</th>
+				
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for paySlip in paySlipAll %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ date('20-'~ paySlip.month ~ '-'~ paySlip.year) | date('M') }}</td>
+       			 	<td>{{ paySlip.year }}</td>
+       			 	<td><button class="button-form-type download-payslip"  data-id="{{paySlip.id}}">Download</button></td>
+       			 	
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+		</div>
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+	.select-radios{
+		margin-top: 10px;
+		margin-bottom: 20px;
+		text-align: center;
+	}
+	.select-radios-input-container{
+		padding:10px;
+		font-size: 2rem;
+		color:darkcyan;
+		font-weight: 600;
+	}
+	.all-pays{
+		display: none;
+	}
+
+	</style>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+	 $(document).ready(function () { 
+	 	$('.show-last-two').click(function(){
+	 		$('.all-pays').css('display','none');
+	 		$('.last-two-pays').css('display','block');
+	 	});
+	 	$('.show-all-pays').click(function(){
+	 		$('.last-two-pays').css('display','none');
+	 		$('.all-pays').css('display','block');
+	 		
+	 	});
+	 	$('.download-payslip').click(function(){
+	 				var payslipId =  $(this).attr('data-id');
+	 				var Url=location.origin + "/auth/getPayslipUrl/"+payslipId;
+		        	$.ajax({url: Url, success: function(result){
+
+		        		if(result.allowed == 'true'){
+		        			var link = document.createElement("a");
+						    link.download = "payslip";
+						    link.href = result.filepath;
+						    link.click();
+		        		}
+		        		
+		        		
+    			}});
+			    
+ 		
+	 	});
+	 	
+	 });
+</script>
+{% endblock %}

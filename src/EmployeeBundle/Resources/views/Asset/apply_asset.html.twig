@@ -1,0 +1,165 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+	<div class="row top-container">
+
+		<div class="top-header ">Apply new Asset</div>
+		{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+			<div class="col col-md-12 asset-form-wrapper">
+					<form action="{{ path('applyAssetRequest') }}" method="post">
+					<div class="row">
+						<div class="col col-md-6">
+							<div class="form-item-container">
+								<label class="form-item-Label">Employee Id</label>
+								<input class="form-item-input" type="text" name="employeeId" value="{{user.NID}}" readonly></input>
+							</div>
+							
+
+
+						</div>
+						<div class="col col-md-6">
+							<div class="form-item-container">
+								<label class="form-item-Label">Asset type</label>
+								<select class="form-input-option" name="asset_type"> 
+									<options>
+										{% for type in assetTypes %}
+										<option   value="{{ type.id}}">{{ type.typeName}}</option>
+										{% endfor %}
+								</options>
+							</select>
+							</div>
+
+
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Apply</button>
+						</div>
+					</div>
+					</form>
+				</div> 
+	</div>
+	<div class="row other-row-type">
+		<div class="top-header ">Asset Request History</div>
+			<div class="col col-md-12 table-container">
+			<table class="display-assets-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Employee Id</th>
+				<th>Asset Type</th>
+				<th>Status</th>
+				<th>Assigned Date</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for asset in assetRequests %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ asset.employeeId }}</td>
+       			 	<td>{{ asset.assetType }}</td>
+       			 	{% if asset.isAssigned == 1 %}
+       			 		<td class="asset-assigned">Assigned</td>
+       			 		<td>{{ asset.fromDate }}</td>
+       			 	{% elseif asset.isRequested == 1 %}
+       			 			<td class="asset-pending">Pending</td>
+       			 			<td></td>
+       			 		{% else %}	
+       			 			<td class="asset-Rejected">Rejected</td>
+       			 			<td></td>
+       			 	{% endif %}
+       			 	
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+	</div>
+		
+	</div>
+
+{% endblock %}
+
+{% block stylesheets %}
+	<style type="text/css">
+.asset-form-wrapper{
+	margin-top:10px;
+}
+.form-item-container{
+			padding: 10px;
+		}
+		.form-item-input{
+			margin-left: 10px;
+			text-align: center;
+		}
+		.form-input-option{
+			width:150px;
+			margin-left: 10px;
+			text-align: center;
+		}
+		.form-apply-button-container{
+			text-align: center;
+			margin-top: 10px;
+			margin-bottom: 10px;
+
+		}
+		.display-assets-table{
+			width:100%;
+		}
+		.display-assets-table tr th{
+			
+			background-color: darkcyan;
+			text-align: center;
+		}
+		.display-assets-table tr td{
+			
+			text-align: center;
+			border-bottom: 1px solid darkcyan;
+			height:50px;
+		}
+		.table-container{
+			margin-top: 10px;
+		}
+		#nav{
+
+			width:80%;
+			text-align: right;
+			margin-top:10px;
+		}
+		#nav a{
+			margin:5px;
+		}
+		.more-details-asset:hover{
+			cursor: pointer;
+
+		}
+		.asset-assigned{
+			color: green;
+		}
+		.asset-Rejected{
+			color:red;
+		}
+		.asset-pending{
+		 color: orange;
+		}
+
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	
+</script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Your Account Details
+		</div>
+		<div class="col col-md-12">
+			<table class="display-data-table">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Name in Account</th>
+				<th>Bank</th>
+				<th>Account Number</th>
+				<th>IFSC Code</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for salaryAccount in salaryAccounts %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ salaryAccount.employeeName }}</td>
+       			 	<td>{{ salaryAccount.bankName }}</td>
+       			 	<td>{{ salaryAccount.accountNumber }}</td>
+       			 	<td>{{ salaryAccount.ifscCode }}</td>
+       			 </tr>
+   			 {% endfor %}
+
+			
+			</tbody>
+		</table>
+		{% if count == 0 %}
+   			 	<div class="no-data-text">Please raise a request to Link your Account details.</div>
+   			 {% endif %}
+
+		</div>
+{% endblock %}
+
+{% block stylesheets %}
+
+	<style type="text/css">
+	.no-data-text{
+		text-align: center;
+		margin-top: 20px;
+		color:red;
+	}
+	</style>
+
+{% endblock %}

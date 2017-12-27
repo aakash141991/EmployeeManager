@@ -1,0 +1,27 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Update Attendance
+		</div>
+</div>
+
+<div class="row">
+	<form action="/auth/update-attendance-submit/{{employee.nID}}" method="post" enctype="multipart/form-data" >
+		<div class="col col-md-12">
+			<div class="form-item-container">
+								<label class="form-item-Label">Upload CSV file</label>
+								<input class="form-item-input" type="file" name="attendanceReport"  ></input> 
+
+							</div>
+							<input type="hidden" value="{{employee.nID}}" name="empId">
+							<input type="hidden" value="{{showPrevious}}" name="showPrevious">
+
+							<button class="button-primary" type="submit">Upload</button>
+					
+		</div>
+	</form>
+</div>
+
+{% endblock %}

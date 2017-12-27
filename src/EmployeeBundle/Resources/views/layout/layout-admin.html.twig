@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+         <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+          <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+       <link rel="stylesheet" type="text/css" href="{{ asset('css/common.css') }}"> 
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="{{ asset('js/commons.js') }}"></script>
+         <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+        <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    </head>
+    <body id="loggedIn-home" > 
+    <div class="container">
+        
+
+
+
+                  {% include 'EmployeeBundle:Includes:admin-header.html.twig' %}
+
+
+        <div class="row page-container">
+          <div class="col col-md-2">
+
+         
+                 {% include 'EmployeeBundle:Includes:admin-side-menu.html.twig' %} 
+
+
+             
+          </div>
+          <div class="col col-md-10">
+            {% block body %}
+
+            {% endblock %}
+          </div>
+        </div>
+        
+         {% include 'EmployeeBundle:Includes:footer.html.twig' %}
+        {% block javascripts %}{% endblock %}
+    </div> 
+     
+    </body>
+</html>

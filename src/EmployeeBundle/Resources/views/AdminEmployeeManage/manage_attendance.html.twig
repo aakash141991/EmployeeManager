@@ -1,0 +1,154 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Manage Attendance
+		</div>
+		<div class="col col-md-12 top-search-bar-container">
+			<div class="suggest-employee-container">
+				<span class="search-employee-label">Search Employee:</span><span ><input id="admin_employee_search"  class="search-employee-input" type="text" name="employee_id"></span><span class="glyphicon glyphicon-search search-employee-search-button"></span>
+			<div id="suggest"></div>
+			</div>
+			
+		</div>
+
+		{% if employee %}
+			<div class="row">
+						<div class="col-md-12 employee-details-container">
+								<table class="display-data-table" id="displayTable">
+								<thead>
+									<tr>
+									<th>Employee Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Designation</th>
+								</tr>
+								</thead>
+								<tbody>
+					       			 <tr>
+					       			 	<td>{{ employee.name }}</td>
+					       			 	<td>{{ employee.email }}</td>
+					       			 	<td>{{ employee.phone}}</td>
+					       			 	<td>{{ employee.designation}}</td>
+					       			 </tr>
+							
+								</tbody>
+							</table>
+						</div>
+			
+			
+				{% if attendance %}
+				<div class="col col-md-4  last-row-col">
+					<div class="display-attendance-heading">
+							Attendance {{ date('20-'~ attendance.month ~ '-'~ attendance.year) | date('M') }}
+						</div>
+						<table class="display-data-table " >
+							<tbody>
+								
+							<tr><td>Total days</td><td>{{attendance.getTotalDays}}</td></tr>
+							<tr><td>Absent days</td><td>{{attendance.getAbsentDays}}</td></tr>
+							<tr><td>Present days</td><td>{{attendance.getPresentDays}}</td></tr>
+							
+								
+							</tbody>
+						</table>
+						<div class="change-attendance-container">
+							<button class="button-primary change-attendance-button" data-id="{{employee.nID}}">Update </button>
+						</div>
+						
+				</div>
+				{% else %}
+					<div class="col col-md-4  last-row-col">
+					<div class="display-attendance-heading">
+							Attendance 
+						</div>
+						<div class="no-data-text">Data Not Availaible Please Update.</div>
+						<div class="change-attendance-container">
+							<button class="button-primary change-attendance-button" data-id="{{employee.nID}}">Update </button>
+						</div>
+					</div>
+
+
+				{% endif %}
+				{% if showPrevious == 'false' %}
+				
+				<div class="col col-md-4  last-row-col">
+					<div class="display-attendance-heading">
+							See previous Month Record 
+						</div>
+						<div class="no-data-text"></div>
+						<div class="change-attendance-container">
+							<button class="button-primary previous-attendance-button" data-id="{{employee.nID}}">Previous </button>
+						</div>
+					</div>
+					{% else %}
+						<div class="col col-md-4  last-row-col">
+					<div class="display-attendance-heading">
+							See Current Month Record 
+						</div>
+						<div class="no-data-text"></div>
+						<div class="change-attendance-container">
+							<button class="button-primary current-attendance-button" data-id="{{employee.nID}}">Next </button>
+						</div>
+					</div>
+
+					{% endif %}
+				
+			</div>
+
+			
+		
+	{% endif %}
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+			$('.search-employee-search-button').click(function(){
+				var employeeId = document.getElementById('admin_employee_search').value;
+				   	window.location=location.origin + "/admin/manage-attendance/"+employeeId;
+			       });
+			$('.previous-attendance-button').click(function(){
+				var employeeId = $(this).attr('data-id');
+				   	window.location=location.origin + "/admin/manage-attendance/"+employeeId+"?showprevious=true";
+			       });
+			$('.current-attendance-button').click(function(){
+				var employeeId = $(this).attr('data-id');
+				   	window.location=location.origin + "/admin/manage-attendance/"+employeeId+"?showprevious=false";
+			       });
+	
+			
+			
+  			
+	});
+
+</script>
+{% endblock %}
+{% block stylesheets %}
+  	<style type="text/css">
+.display-attendance-heading{
+	margin-top:20px;
+  		height: 30px;
+            background-color: #f3e5dd;
+            text-align: center;
+            font-size:2rem;
+            padding-top:0px;
+            font-weight:600;
+            width:90%;
+}
+.change-attendance-container{
+	text-align: center;
+}
+.no-data-text{
+	color:#de5a5a;
+		margin-top:20px;
+		text-align: center;
+		margin-bottom: 20px;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,180 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Generate Pay Slip
+		</div>
+		<div class="col col-md-12 top-search-bar-container">
+			<div class="suggest-employee-container">
+				<span class="search-employee-label">Search Employee:</span><span ><input id="admin_employee_search" class="search-employee-input" type="text" name="employee_id"></span><span class="glyphicon glyphicon-search admin-search-button"></span>
+			<div id="suggest"></div>
+			</div>
+			{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errorMessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errorMessage}}</div>
+				</div>
+		{% endif %}
+			
+		</div>
+		
+		
+		</div>
+		{% if employee %}
+			<div class="row">
+						<div class="col-md-12 employee-details-container">
+								<table class="display-data-table" id="">
+								<thead>
+									<tr>
+									<th>Employee Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Designation</th>
+								</tr>
+								</thead>
+								<tbody>
+					       			 <tr>
+					       			 	<td>{{ employee.name }}</td>
+					       			 	<td>{{ employee.email }}</td>
+					       			 	<td>{{ employee.phone}}</td>
+					       			 	<td>{{ employee.designation}}</td>
+					       			 </tr>
+							
+								</tbody>
+							</table>
+						</div>
+				{% if payment %}
+				<div class="col col-md-4 last-row-col">
+						<div class="display-payment-heading">
+							Payment Details
+						</div>
+						<table class="display-data-table " >
+							<tbody>
+								
+							<tr><td>Basic Pay</td><td>{{payment.basicSalary}}</td></tr>
+							<tr><td>HRA</td><td>{{payment.hra}}</td></tr>
+							<tr><td>Special Allowance</td><td>{{payment.specialAllowance}}</td></tr>
+							<tr><td>Conveyance Allowance</td><td>{{payment.conveyanceAllowance}}</td></tr>
+							<tr><td>PF Contribution</td><td>{{payment.pfContribution}}</td></tr>
+							<tr><td>Income Tax Deduction</td><td>{{payment.incomeTax}}</td></tr>
+								
+							</tbody>
+						</table>
+
+				</div>
+			{% else %}
+				<div class="col col-md-4 last-row-col">
+					<div class="display-payment-heading">
+							Payment Details
+						</div>
+						<div class="no-data-text"> Data Not Availaible</div>
+				</div>
+			{% endif %}
+			{% if attendance %}
+				<div class="col col-md-4  last-row-col">
+					<div class="display-payment-heading">
+							Attendance
+						</div>
+						<table class="display-data-table " >
+							<tbody>
+								
+							<tr><td>Total days</td><td>{{attendance.getTotalDays}}</td></tr>
+							<tr><td>Absent days</td><td>{{attendance.getAbsentDays}}</td></tr>
+							<tr><td>Present days</td><td>{{attendance.getPresentDays}}</td></tr>
+							
+								
+							</tbody>
+						</table>
+						<div class="change-attendance-container">
+							<button class="button-primary change-attendance-button" data-id="{{employee.nID}}">Change </button>
+						</div>
+						
+				</div>
+				{% else %}
+					<div class="col col-md-4  last-row-col">
+					<div class="display-payment-heading">
+							Attendance
+						</div>
+						<div class="no-data-text">Data Not Availaible</div>
+					</div>
+
+				{% endif %}
+				<div class="col col-md-4  last-row-col">
+					<div class="Action-button-container">
+						<button class="button-primary update-payment-button" data-id="{{employee.nID}}">Update Payment </button>
+					<button class="button-primary generate-pay-slip" data-id="{{employee.nID}}">Generate PaySlip</button>
+					</div>
+					
+				</div>
+				
+			</div>
+			
+		
+	{% endif %}
+
+
+{% endblock %}
+
+  {% block stylesheets %}
+  	<style type="text/css">
+
+  	.employee-details-container{
+  	}
+
+  	.display-payment-heading{
+  		margin-top:20px;
+  		height: 30px;
+            background-color: #f3e5dd;
+            text-align: center;
+            font-size:2rem;
+            padding-top:0px;
+            font-weight:600;
+            width:90%;
+
+
+  	}
+	.no-data-text{
+		color:#de5a5a;
+		margin-top:20px;
+		text-align: center;
+	}  
+	.Action-button-container{
+		margin-top: 20px;
+	}
+	.update-payment-button{
+		margin-bottom: 10px;
+	}
+	.change-attendance-container{
+		text-align: center;
+	}
+
+  	</style>
+  {% endblock %}
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+			$('.admin-search-button').click(function(){
+				var employeeId = document.getElementById('admin_employee_search').value;
+				   	window.location=location.origin + "/admin/getEmployeeDetails/"+employeeId;
+			       });
+			$('.generate-pay-slip').click(function(){
+				var employeeId = $(this).attr('data-id');
+				   	window.location=location.origin + "/admin/generate-Payslip-submit/"+employeeId;
+			       });
+			$('.update-payment-button').click(function(){
+				var employeeId = $(this).attr('data-id');
+				   	window.location=location.origin + "/admin/update-payment/"+employeeId;
+			       });
+			
+			
+			
+  			
+	});
+
+</script>
+{% endblock %}

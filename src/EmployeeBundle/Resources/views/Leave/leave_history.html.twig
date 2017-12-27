@@ -1,0 +1,98 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Your Leave History
+		</div>
+		<table class="display-leaves-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Leave type</th>
+				<th>From Date</th>
+				<th>To date</th>
+				<th>Leave status</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for leave in leaves %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ leave.leaveType }}</td>
+       			 	<td>{{ leave.fromDate }}</td>
+       			 	<td>{{ leave.toDate }}</td>
+       			 	{% if  leave.leaveStatus == 'approved' %}
+       			 	<td class="leave-approved">{{ leave.leaveStatus }}</td>
+       			 {% elseif leave.leaveStatus == 'rejected'  %}
+       			 	<td class="leave-rejected" >{{ leave.leaveStatus }}</td>
+       			 {% else %}
+       			 	<td class="leave-no-action" >{{ leave.leaveStatus }}</td>
+       			 {% endif %}
+
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+			<div id="nav"></div>
+		
+	
+		
+	
+</div>
+{% endblock %}
+{% block stylesheets %}
+
+	<style type="text/css">
+			
+		.display-leaves-table{
+			margin-top: 5%;
+			    width: 90%;
+
+		}
+		.display-leaves-table tr th{
+			height: 50px;
+			background-color: darkcyan;
+			text-align: center;
+		}
+		.display-leaves-table tr td{
+			
+			text-align: center;
+			border-bottom: 1px solid darkcyan;
+			height:50px;
+		}
+		#nav{
+
+			width:80%;
+			text-align: right;
+			margin-top:10px;
+		}
+		#nav a{
+			margin:5px;
+		}
+		.leave-approved{
+			color: green;
+		}
+		.leave-rejected{
+			color:red;
+		}
+		.leave-no-action{
+		 color: orange;
+		}
+
+
+
+		
+	</style>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	
+</script>
+{% endblock %}

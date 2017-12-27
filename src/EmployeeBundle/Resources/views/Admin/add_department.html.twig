@@ -1,0 +1,70 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+
+{% block body %}
+<div class="row top-container">
+	<div class=" top-header">
+			Add Department
+		</div>
+		<div class="col col-md-12 admin-top-support">
+			<button class="button-primary-danger go-back">Go Back</button>
+		</div>
+		{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+	<div class="col col-md-12">
+		<form action="{{ path('addDepartmentSubmit') }}" method="POST">
+
+		<div class="row">
+			<div class="col col-md-6">
+				<div class="form-item-container">
+								<label class="form-item-Label">Department Name</label>
+								<input class="form-item-input" type="text" name="departmentName"  required="required"></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Department Head</label>
+								<input id="admin_employee_search" class="form-item-input" type="text" name="departmentHead" required="required" ></input>
+								<div id="suggest"></div>
+							</div>
+			</div>
+			<div class="col col-md-6">
+				<div class="form-item-container">
+								<label class="form-item-Label">Role</label>
+								<select class="form-input-option" name="role"> 
+									<options>
+										{% for role in roles %}
+										<option   value="{{ role.roleActionName}}">{{ role.roleName}}</option>
+										{% endfor %}
+									</options>
+								</select>
+							</div>
+			</div>
+		</div>
+		<div class="row">
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Add</button>
+						</div>
+					</div>
+
+		</form>
+	</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$('.go-back').click(function(){
+				window.location = location.origin + "/admin/update-department"
+			});
+		
+	});
+	</script>
+{% endblock %}
+

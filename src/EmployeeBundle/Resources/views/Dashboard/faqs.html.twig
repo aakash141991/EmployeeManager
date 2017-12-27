@@ -1,0 +1,85 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+
+
+{% block body %}
+<div class="row top-container">
+	<div class=" top-header">
+			Frequently Asked Questions
+		</div>
+	</div>
+	
+			<div class="col-md-12 show-Back-container">
+							<a href="#"><button class="button-primary Go-back" >
+								Go Back</button></a>
+						</div>
+		
+<div class="col col-md-12 table-container">
+	<table id="displayTable" >
+		<thead>
+			<tr>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% if all == 'true'%}
+			{% set count = 0 %}
+			{% for faq in faqs %}
+				{% set count = count + 1 %}
+					<tr><td><div class="faq-question">{{count}} . {{ faq.question }}</div>
+					<div class="faq-answer">{{ faq.answer }}</div></td></tr>
+					
+			{% endfor %}
+		{% else %}
+			<tr><td><div class="faq-question">1. {{ faqs.question }}</div>
+					<div class="faq-answer">{{ faqs.answer }}</div></td></tr>
+		{% endif %}
+		</tbody>
+			
+	</table>
+	{% if all == 'false'%}
+				<div class="row">
+						<div class="col-md-12 show-all-container">
+							<a href="All"><button class="button-primary" >
+								Show All</button></a>
+						</div>
+					</div>
+	{% endif %}
+
+
+</div>			
+
+{% endblock %}
+{% block stylesheets %}
+<style type="text/css">
+	.faq-question{
+		font-size: 2rem;
+		font-weight: 600;
+	}
+	.faq-answer{
+		font-size: 1.3rem;
+	}
+	.show-all-container{
+		margin-top: 20px;
+		text-align: center;
+	}
+	.show-Back-container{
+		margin-bottom: 20px;
+	}
+
+</style>
+
+{% endblock %}
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+
+$(".Go-back").click(function(){
+        window.location= location.origin + "/auth/apply-leave";
+		});
+});
+</script>
+{% endblock %}
+
+

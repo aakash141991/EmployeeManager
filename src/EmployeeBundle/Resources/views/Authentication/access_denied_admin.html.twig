@@ -1,0 +1,23 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block body %}
+	<div class="row top-container">
+		<div class="leave-form-header top-header ">Access Denied</div>
+		<div class="page-center">
+			<div class="Danger-message">You tried to access an unauthorized page. Reported !</div>
+			</div>
+	</div>
+
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+	.page-center{
+		margin-top: 10%;
+		margin-left: 10%;
+		width:60%;
+		font-size: 2rem;
+			}
+	.Danger-message{
+		color:red;
+	}
+	</style>
+{% endblock %}

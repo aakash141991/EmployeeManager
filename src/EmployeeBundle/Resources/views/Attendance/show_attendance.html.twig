@@ -1,0 +1,37 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			 Attendance
+		</div>
+</div>
+{% if data %}
+<div class="row">
+		<div class="col col-md-12 table-container">
+			<table class="display-data-table" id="">
+			<thead>
+				<tr>
+				<th>Date</th>
+				<th>Present</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for attendance in data %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	{% for entry in attendance %}
+       			 	<td>{{ entry }}</td>
+       			 	{% endfor %}
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+		
+	</div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,88 @@
+<link rel="stylesheet" type="text/css" href="{{ asset('css/side-menu.css') }}">
+<script src="{{ asset('js/admin-side-menu.js') }}"></script>
+
+<script type="text/javascript">
+      			$(document).ready(function () {
+      				$('.side-menu-contents').css('display','block');
+						$('.manager-role').css('display','block');
+						$('.asset-manager-role').css('display','block');
+						$('.service-role').css('display','block');
+						$('.pf-role').css('display','block');
+						$('.hr-role').css('display','block');
+						$('.attendance-manager-role').css('display','block');
+				});
+				</script>	       
+         
+<div class="side-menu-wrapper">
+	<div class="side-menu-title">
+		<img class="menu-image" src="{{asset('multiple-users-silhouette.png')}}">
+	</div>
+	<div class="side-menu-contents">
+		<div class="side-content-wrap">
+			<button type="button" class="side-list-header side-menu-dashboard-link"><span class="menu-icon glyphicon glyphicon-home" ></span>Dashboard </button>
+			<button type="button" class="side-list-header" data-toggle="collapse" data-target="#leaves"><span class="menu-icon glyphicon glyphicon-list-alt" ></span>Common Actions <span class="glyphicon glyphicon-chevron-down " style="left:2%;"></span></button>
+			  <div id="leaves" class="collapse out">
+			     <ul>
+				     
+				     <li class="side-list-item-collapsed manager-role">
+				     	<a class="side-list-item-link respond-leave-request" href="#" >Respond Leave</a>
+				     </li>
+				     <li class="side-list-item-collapsed asset-manager-role">
+				     	<a class="side-list-item-link respond-asset-request" href="#" >Respond Asset</a>
+				     </li>
+				     		     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link pf-role side-menu-generate-paySlip" href="#" >Generate Pay Slip</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-respond-request service-role" href="#" >Serve a request</a>
+				     </li>
+			     </ul>
+  				</div>	
+
+ 
+  					<button type="button" class="side-list-header hr-role" data-toggle="collapse" data-target="#humanResource"><span class="menu-icon glyphicon glyphicon-pushpin" ></span>HR Action <span class="glyphicon glyphicon-chevron-down " style="left:30%;"></span></button>
+  				<div id="humanResource" class="collapse out">
+			     <ul>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-add-employee" href="#" >Add New Employee</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-update-employee" href="#" >Update / Remove Employee</a>
+				     </li>
+				     
+			     </ul>
+  				</div>
+
+
+  						<button type="button" class="side-list-header manage-attendance-button attendance-manager-role"><span class="menu-icon glyphicon glyphicon-time" ></span>Manage Attendance </button>
+  						
+			<button type="button" class="side-list-header" data-toggle="collapse" data-target="#Administrative"><span class="menu-icon glyphicon glyphicon-lock" ></span>Administrative  <span class="glyphicon glyphicon-chevron-down " style="left:13%;"></span></button>
+			  <div id="Administrative" class="collapse out">
+			     <ul>
+				     
+				     <li class="side-list-item-collapsed manager-role">
+				     	<a class="side-list-item-link update-department" href="#" >Update Departments</a>
+				     </li>
+				     <li class="side-list-item-collapsed asset-manager-role">
+				     	<a class="side-list-item-link update-designations" href="#" >Update Designations</a>
+				     </li>
+				     		     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link pf-role side-menu-update-leaves" href="#" >Update Leaves</a>
+				     </li>
+				     <li class="side-list-item-collapsed">
+				     	<a class="side-list-item-link side-menu-update-roles " href="#" >Update Roles</a>
+				     </li>
+			     </ul>
+  				</div>	
+
+  				
+  				{# end side content wrap #}
+		</div>
+	
+			
+		
+	</div>
+</div>
+<div id="mobile-menu">
+	<div class="glyphicon glyphicon-remove mobile-close-menu"></div>
+</div>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	 <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+         <link rel="stylesheet" type="text/css" href="{{ asset('css/payslip.css') }}"> 
+    </head>
+<body style="width:1000px;">
+    	
+        <div style="margin-bottom: 10px;"><img style="margin-bottom:10px" src="/nettantra-logo.png" alt="Nettantra"></div>
+
+        <div class="main-container" style="color:#8a7d7d;border: 1px solid #ccc;
+    text-align: center;font-size: 10px;
+    color:#8a7d7d;font-size: 10px;
+    font-family: 'Times New Roman';border-left-style: dotted;border-right-style: dotted;">
+            <div class="payslip-header" style="
+    border-bottom: 1px solid #ccc;
+    text-align:center;">
+                <div>Nettantra Technologies</div>
+                <div>Bhubaneshwar</div>
+                <div>Pay slip for the month of {{ date('20-'~ paySlip.month ~ '-'~ paySlip.year) | date('M') }}</div>
+            </div>
+
+                {% block body %}
+                
+
+            {% endblock %}
+    </div>
+        	
+    	 
+            
+    </body>
+
+</html>
