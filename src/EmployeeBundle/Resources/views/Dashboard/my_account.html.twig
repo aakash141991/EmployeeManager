@@ -1,8 +1,9 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}My Account{% endblock %}
 {% block body %}
 	<div class="row top-container">
 
-		<div class="top-header ">My Account</div>
+		<div class="top-header ">Change Password</div>
 	</div>
 	<div class="row">
 		<form action="{{path('changeAuthPassword')}}" method="POST">
@@ -38,10 +39,16 @@
 		<div class="top-header ">Other Account Details</div>
 		<table class="display-details-table">
 			<tr>
-				<td>Email : {{user.email}}</td><td>Phone : {{user.phone}}</td>
+				<td ><span class="support-image glyphicon glyphicon-envelope"></span> Email : </td> <td>{{user.email}}</td>
 			</tr>
 			<tr>
-				<td>Address : {{user.address}}</td><td>Designation : {{user.designation}}</td>
+				<td><span class=" support-image glyphicon glyphicon-phone"></span>Phone :</td> <td> {{user.phone}}</td>
+			</tr>
+			<tr>
+				<td><span class=" support-image glyphicon glyphicon-list-alt"></span>Address :</td> <td>{{user.address}}</td>
+			</tr>
+			<tr>
+				<td><span class=" support-image glyphicon glyphicon-user"></span>Designation :</td> <td> {{user.designation.name}}</td>
 			</tr>
 		</table>
 		
@@ -56,21 +63,29 @@
 	<style type="text/css">
 .display-details-table{
 			width:80%;
-			font-size: 2rem;
+			font-size: 1.7rem;
+			margin-top:25px;
+			border-spacing: 10px;
 		}
-		.display-details-table tr th{
+		.display-details-table tr {
 			
-			background-color: darkcyan;
-			text-align: center;
+			margin-bottom: 10px;
+		}
+		.display-details-table tr:nth-child(odd) {
+			background-color:#f3e5dd;		
 		}
 		.display-details-table tr td{
+			padding-left: .5em;
+			text-align: left;
+			 padding-top: .5em;
+    padding-bottom: .5em;
 			
-			text-align: center;
-			border-right: 1px dotted darkcyan;
-			height:50px;
 		}
 		.change-password{
 			margin-top: 10%;
+		}
+		.support-image{
+			margin-right:10px;
 		}
 		</style>
 {% endblock %}

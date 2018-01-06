@@ -1,10 +1,11 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}Employee{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
 			Update Employee Details
 		</div>
-		<div class="col col-md-12 table-container">
+		<div class="col col-md-12 table-container ">
 			<table class="display-data-table" id="displayTable">
 			<thead>
 				<tr>
@@ -25,7 +26,11 @@
        			 	<td>{{ employee.nID }}</td>
 					<td>{{ employee.email }}</td>
 					<td>{{ employee.phone}}</td>
-					<td>{{ employee.designation}}</td>
+					{% if employee.designation %}
+						<td>{{ employee.designation.name}}</td>
+					{% else %}
+						<td>Not set</td>
+				{% endif %}	
        			 	<td><button class="button-form-type update-employee" data-toggle="modal" data-target="#updateModal"  data-id="{{employee.nID}}">Update</button>
        			 	<button class="button-form-type-danger delete-employee" data-toggle="modal" data-target="#deleteModal"  data-id="{{employee.nID}}">Delete</button></td>
        			 </tr>

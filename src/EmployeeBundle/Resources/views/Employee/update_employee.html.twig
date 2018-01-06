@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Employee{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
@@ -12,7 +13,9 @@
 					<th>Employee ID</th>
 					<th>Email</th>
 					<th>Phone</th>
-					<th>Designation</th>
+
+						<th>Designation</th>
+				
 					<th>Action</th>
 					</tr>
 			</thead>
@@ -25,7 +28,12 @@
        			 	<td>{{ employee.nID }}</td>
 					<td>{{ employee.email }}</td>
 					<td>{{ employee.phone}}</td>
-					<td>{{ employee.designation}}</td>
+				{% if employee.designation %}
+						<td>{{ employee.designation.name}}</td>
+					{% else %}
+						<td>Not set</td>
+				{% endif %}	
+					
        			 	<td><button class="button-form-type update-employee" data-toggle="modal" data-target="#updateModal"  data-id="{{employee.nID}}">Update</button>
        			 	<button class="button-form-type-danger delete-employee" data-toggle="modal" data-target="#deleteModal"  data-id="{{employee.nID}}">Delete</button></td>
        			 </tr>

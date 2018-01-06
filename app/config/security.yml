@@ -60,6 +60,12 @@ security:
                 invalidate_session: true
     access_control:
         - { path: ^/auth/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/auth/forgot-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/auth/forgot-password-submit, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/forgot-password, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/forgot-password-submit, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/passwordReset, roles: IS_AUTHENTICATED_ANONYMOUSLY } 
+        - { path: ^/admin/passwordResetSubmit, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/auth,roles: [ROLE_ADMIN, ROLE_EMPLOYEE]  }
         - { path: ^/admin, roles: ROLE_ADMIN }

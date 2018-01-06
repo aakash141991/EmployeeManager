@@ -3,6 +3,8 @@
 namespace EmployeeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * LeaveTypes
@@ -27,6 +29,25 @@ class LeaveTypes
      * @ORM\Column(name="typeName", type="string", length=255)
      */
     private $typeName;
+
+     /**
+     * @ORM\OneToMany(targetEntity="EmployeeLeave", mappedBy="leaveTypes")
+     */
+    private $employeeLeaves;
+
+      public function __construct()
+    {
+        $this->employeeLeaves = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|EmployeeLeave[]
+     */
+    public function getEmployeeLeaves()
+    {
+        return $this->employeeLeaves;
+    }
+
 
     /**
      * @var int

@@ -1,0 +1,127 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}Tax{% endblock %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Update Tax Slab
+		</div>
+		<div class="col col-md-12 admin-top-support">
+			<button class="button-primary add-Tax-Slab">Add New</button>
+		</div>
+
+		<div class="col col-md-12 last-row-col">
+			{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Taxable Income </th>
+				<th>Tax Rate</th>
+				<th>Cess</th>
+				<th>Action</th>
+				
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for tax in taxes %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	{% if tax.incomeUpto == 0 %}
+ 						<td> > {{ tax.incomeFrom }}</td>
+ 					{% else %}
+       			 	<td>{{ tax.incomeFrom }} - {{ tax.incomeUpto }}</td>
+       			 	{% endif %}
+
+ 					{% if tax.taxRate == 0 %}
+ 						<td>No tax</td>
+ 					{% else %}
+ 						<td>{{tax.taxRate}} %</td>
+ 					{% endif %}
+
+       			 	{% if tax.cess == 0 %}
+ 						<td>No cess</td>
+ 					{% else %}
+ 						<td>{{tax.cess}} %</td>
+ 					{% endif %}
+       			 	<td><button class="button-form-type edit-tax-slab "   data-id="{{tax.id}}">Edit</button> <button data-toggle="modal" data-target="#removeModal"  data-id="{{tax.id}}" class="button-form-type-danger remove-taxSlab">remove</button></td>
+       			 
+       			 	
+
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+		<!-- Reject Modal -->	
+			 	<div id="removeModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Remove  Tax Slab</h4>
+			      </div>
+			      <div class="modal-body">
+			        <p>This Tax Slab data will be deleted.</p>
+			      </div>
+			      <div class="modal-footer">
+			      	<button type="button" class="btn button-primary delete-tax-confirm form-submit" data-dismiss="modal" >delete</button>
+			        <button type="button" class="btn button-primary-danger " data-dismiss="modal">close</button>
+			      </div>
+			    </div>
+
+			  </div>
+			</div>
+		</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+			var taxId="";
+			$('.edit-tax-slab').click(function(){
+				taxId=$(this).attr("data-id");
+				window.location=location.origin + "/admin/update-tax-slab/"+taxId;
+			});
+			$('.add-Tax-Slab').click(function(){
+				taxId=$(this).attr("data-id");
+				window.location=location.origin + "/admin/add-tax-slab";
+			});
+			$('.remove-taxSlab').click(function(){
+				taxId=$(this).attr("data-id");
+				
+			});
+			$('.delete-tax-confirm ').click(function(){
+				
+
+				var Url=location.origin + "/admin/remove-tax-submit/"+taxId;
+		        	$.ajax({url: Url, success: function(result){
+		        		
+		    			}});
+		        	setTimeout(function(){ 
+		        		location.reload();
+		        }, 500);
+				
+			});
+			
+			
+			
+		
+
+	});
+
+</script>
+{% endblock %}

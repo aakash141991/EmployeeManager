@@ -1,0 +1,81 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Deduction{% endblock %}
+{% block body %}
+	<div class="row top-container">
+
+		<div class="top-header ">Respond to claims</div>
+	</div>
+	<div class="row">
+	<div class="col col-md-12 table-container">
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Deduction Amount</th>
+				<th>Employee Id</th>
+				<th>Take Action</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for claim in deductionClaims %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ claim.deduction }}</td>
+       			 	<td>{{ claim.employeeId }}</td>
+       			 	<td><button class="button-form-type resolve-claim" data-toggle="modal" data-target="#resolveModal"  data-id="{{claim.id}}">Resolve</button></td>
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+		{# resolve	modal #}
+		<div id="resolveModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Resolve this Claim</h4>
+			      </div>
+			      <div class="modal-body">
+			      		<div class="row">
+							<div class="col col-md-4">
+								<div class="form-item-container">
+									<label class="form-item-Label">Change Status</label>
+									<select id="changed_status" class="form-input-option">
+					        		<options>
+					        			
+					        				<option value="1">approve</option>
+					        				<option value="0">reject</option>
+					        				 
+					        		</options>
+					        	</select>
+					        </div>
+							</div>
+							<div class="col col-md-1 or-text-modal"> Or</div>
+							<div class="col col-md-4">
+								<div class="form-item-container">
+									<label class="form-item-Label">Assign To</label>
+									<input type="text" name="employee_mid" id="employee_search">
+
+									<div id="suggest"></div>
+					        </div>
+							</div>
+						</div>
+			        	
+			      </div>
+			      <div class="modal-footer">
+			      	<button type="button" class="btn button-primary resolve-claim-confirm form-submit" data-dismiss="modal">Submit</button>
+			        <button type="button" class="btn button-primary-danger" data-dismiss="modal">close</button>
+			      </div>
+			    </div>
+
+			  </div>
+			</div>
+	</div>
+	</div>
+{% endblock %}

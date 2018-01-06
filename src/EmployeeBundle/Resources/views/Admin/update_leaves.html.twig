@@ -1,5 +1,5 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
-
+{% block title %}Leave{% endblock %}
 {% block body %}
 <div class="row top-container">
 	<div class=" top-header">
@@ -28,7 +28,7 @@
        			 	<td>{{ leaveType.typeName }}</td>
        			 	<td>{{ leaveType.daysAlloted }} </td>
        			 	<td>{{ leaveType.documentsRequired }} </td>
-       			 	<td><button class="button-form-type change-department"  data-id="{{leaveType.id}}">update</button> <button data-toggle="modal" data-target="#delete"   data-id="{{leaveType.id}}" class="button-form-type-danger delete-department">Delete</button></td>
+       			 	<td><button class="button-form-type update-leave-type"  data-id="{{leaveType.id}}">update</button> <button data-toggle="modal" data-target="#delete"   data-id="{{leaveType.id}}" class="button-form-type-danger delete-department">Delete</button></td>
        			 	
        			 </tr>
    			 {% endfor %}
@@ -65,9 +65,15 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
+		var leaveTypeId = "";
 		$('.add-leave').click(function(){
 				window.location = location.origin + "/admin/add-new-leave"
 			});
+		$('.update-leave-type').click(function(){
+			 leaveTypeId = $(this).attr("data-id");
+				window.location = location.origin + "/admin/update-leaves/"+leaveTypeId
+			});
+		
 		
 	});
 	</script>

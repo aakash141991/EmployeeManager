@@ -1,0 +1,66 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Attendance{% endblock %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			 Full Attendance of {{employee.name}} - {{employee.nID}}
+		</div>
+		<div class="admin-top-support">
+			<button class="button-primary go-back" data-id="{{employee.nID}}">Go Back</button>
+		</div>
+		<div class="row">
+		<div class="col col-md-12 table-container">
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>Month</th>
+				<th>Year</th>
+				<th>Total days</th>
+				<th>Present days</th>
+				<th>Absent days</th>
+				<th>Action</th>
+		
+				</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for attendance in fullAttendance %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{date('20-'~ attendance.month ~ '-'~ attendance.year) | date('M') }}</td>
+       			 	<td>{{date('20-'~ attendance.month ~ '-'~ attendance.year) | date('Y') }}</td>
+       			 	<td>{{attendance.totalDays}}</td>
+       			 	<td>{{attendance.presentDays}}</td>
+       			 	<td>{{attendance.absentDays}}</td>
+       			 	
+       			 	<td><button class="button-form-type update-attendance" emp-data-id="{{employee.nID}}" data-id="{{attendance.id}}">Update</button></td>
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+		
+	</div>
+</div>
+</div>
+{% endblock %}
+{% block javascripts %}
+
+
+<script type="text/javascript">
+$(document).ready(function () {
+		$('.go-back').click(function(){
+			var empId = $(this).attr('data-id');
+			window.location = location.origin +"/auth/manage-attendance/"+empId +"?showprevious=false";
+			
+		})
+		$('.update-attendance').click(function(){
+			var empId = $(this).attr('emp-data-id');
+			window.location = location.origin +"/auth/update-attendance?employeeId="+empId +"&&showprevious=false";
+			
+		})
+});
+</script>
+	
+{% endblock %}

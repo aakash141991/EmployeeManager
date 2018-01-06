@@ -74,6 +74,9 @@
     .login-input-container{
       text-align: center;
     }
+    .forgot-pass-link{
+      margin-bottom: 10px;
+    }
 
     @media screen and (max-width: 420px) {
          .login-form-container{

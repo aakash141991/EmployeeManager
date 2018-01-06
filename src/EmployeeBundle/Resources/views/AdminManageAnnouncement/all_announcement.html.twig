@@ -1,0 +1,103 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+
+{% block title %}Announcement{% endblock %}
+{% block body %}
+<div class="row top-container">
+	<div class=" top-header">
+			Announcements
+		</div>
+		<div class="col col-md-12 admin-top-support">
+			<button class="button-primary add-Announcement">Add New</button>
+		</div>
+		
+				</div>
+	<div class="col col-md-12 table-container">
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Title</th>
+				<th>Description</th>
+				<th>Actions</th>
+				
+				
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for announce in announcements %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ announce.title }}</td>
+       			 	<td>{{ announce.description}} </td>
+       			 	<td><button class="button-form-type edit-announcement"   data-id="{{announce.id}}">Edit</button> <button data-toggle="modal" data-target="#deleteModal"  data-id="{{announce.id}}" class="button-form-type-danger  delete-announcement">Delete</button></td>
+       			 	
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+			<!-- Delete Modal -->	
+			 	<div id="deleteModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Delete this Announcement</h4>
+			      </div>
+			      <div class="modal-body">
+			        <p>This Announcement  will be Deleted.</p>
+			      </div>
+			      <div class="modal-footer">
+			      	<button type="button" class="btn button-primary delete-announcement-confirm form-submit" data-dismiss="modal" >delete</button>
+			        <button type="button" class="btn button-primary-danger " data-dismiss="modal">close</button>
+			      </div>
+			    </div>
+
+			  </div>
+			</div>
+	</div>
+	
+				
+	
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		var announceId="";
+			$('.edit-announcement').click(function(){
+				announceId=$(this).attr("data-id");
+				window.location= location.origin + "/admin/edit-announcement/"+announceId;
+			});
+			
+			$('.delete-announcement').click(function(){
+				announceId=$(this).attr("data-id");
+			});
+			$('.delete-announcement-confirm').click(function(){
+				var Url=location.origin + "/admin/delete-announcement-confirm/"+announceId;
+		        	$.ajax({url: Url, success: function(result){
+		        		
+		    			}});
+		        	setTimeout(function(){ 
+		        		location.reload();
+		        }, 500);
+			});
+
+			$('.add-Announcement').click(function(){
+				
+				window.location= location.origin + "/admin/add-Announcement";
+			});
+			
+
+	});
+
+</script>
+{% endblock %}

@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use EmployeeBundle\Entity\LeaveFaq;
 use EmployeeBundle\Entity\Employee;
+use EmployeeBundle\Entity\Announcement;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -16,9 +17,10 @@ class DashboardController extends Controller
      */
     public function dashboardAction()
     {	
-    	  
+
+    	$announcements = $this->getDoctrine()->getRepository(Announcement::class)->findBy(array(), array('id' => 'DESC'), 5);
         return $this->render('EmployeeBundle:Dashboard:dashboard.html.twig', array(
-            
+            'announcements' => $announcements,
         ));
     }
      /**
@@ -72,7 +74,7 @@ class DashboardController extends Controller
                             $message="Password Changed Successfully";
 
                     }else{
-                        $errorMessage="New Password and COnfirm Password should be same";
+                        $errorMessage="New Password and Confirm Password should be same";
 
                     }
               }else{
@@ -113,9 +115,9 @@ class DashboardController extends Controller
      */
     public function adminDashboardAction()
     {	
-    	  
+    	  $announcements = $this->getDoctrine()->getRepository(Announcement::class)->findBy(array(), array('id' => 'DESC'), 5);
         return $this->render('EmployeeBundle:Admin:admin-dashboard.html.twig', array(
-            
+            'announcements' => $announcements,  
         ));
     }
 

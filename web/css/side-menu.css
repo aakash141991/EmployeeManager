@@ -1,6 +1,21 @@
+@media screen and (max-width: 360px) {
+         .side-menu-wrapper{
+              display:none;
+              width:100%;
+         }
+        
+   }
 @media screen and (max-width: 720px) {
          .side-menu-wrapper{
               display:none;
+              width:50%;
+         }
+        
+   }
+   @media screen and (min-width: 720px) {
+         .side-menu-wrapper{
+              display:block;
+              width:20%;
          }
         
    }
@@ -11,7 +26,6 @@
 	height:100%;
 	z-index: 80;
 	background-color: #fff;
-	width:20%;
 	margin-bottom:20px;
 }
 .side-menu-title{

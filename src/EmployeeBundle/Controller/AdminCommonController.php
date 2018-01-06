@@ -15,9 +15,14 @@ use EmployeeBundle\Entity\Status;
 use EmployeeBundle\Entity\RequestTicket;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use \DateTime;
 
 class AdminCommonController extends Controller
 {
+
+
+
+    
     /**
      * @Route("/admin/respond-leave",name="adminRespondLeave")
      */
@@ -237,12 +242,14 @@ class AdminCommonController extends Controller
     }
 
      /**
-     * @Route("/admin/respondRequestSubmit/{requestId}",name="adminespondRequestSubmit")
+     * @Route("/admin/respondRequestSubmit/{requestId}",name="adminRespondRequestSubmit")
      */
     public function respondRequestSubmitAction(Request $request,$requestId)
     {
+
       $user = $this->getUser();
       $ticket = $this->getDoctrine()->getRepository(RequestTicket::class)->find($requestId);
+       $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy( array('nID' => $ticket->getEmployeeId(), ));
       $assignedTo=$ticket->getAssignedTo();
      
           $status = $request->query->get('status');
@@ -253,6 +260,22 @@ class AdminCommonController extends Controller
                 $en = $this->getDoctrine()->getManager();
                       $en->merge($ticket);
                       $en->flush();
+              $subject="Request Ticket resolved";
+              $viewPath='EmployeeBundle:MailBody:request_resolved.html.twig';
+              $fromEmail='admin@nettantra.net';
+              $toEmail=$employee->getEmail();
+              $name=$employee->getName();
+
+                $email = \Swift_Message::newInstance()
+                ->setSubject($subject)
+                ->setFrom($fromEmail)
+                ->setTo($toEmail)
+                ->setBody(
+                    $this->renderView(
+                        $viewPath,
+                        array('name' => $name,'id' => $id,)
+                    ),'text/html');
+                 $this->get('mailer')->send($email);
             }else{
               $assigned = $request->query->get('assigned');
               if(isset($assigned )){

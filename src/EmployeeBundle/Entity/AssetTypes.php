@@ -3,6 +3,8 @@
 namespace EmployeeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * AssetTypes
@@ -41,6 +43,31 @@ class AssetTypes
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
+
+    /**
+     * @ORM\OneToMany(targetEntity="EmployeeAsset", mappedBy="assetType")
+     */
+    private $employeeAssets;
+
+      public function __construct()
+    {
+        $this->employeeAssets = new ArrayCollection();
+    }
+    /**
+     * @return Collection|EmployeeAsset[]
+     */
+    public function getEmployeeAssets()
+    {
+        return $this->employeeAssets;
+    }
+
+    /**
+     * @return Collection|EmployeeLeave[]
+     */
+    public function getEmployeeLeaves()
+    {
+        return $this->employeeLeaves;
+    }
 
 
     /**

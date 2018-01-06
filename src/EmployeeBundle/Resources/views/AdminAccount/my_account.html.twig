@@ -1,0 +1,81 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}My Account{% endblock %}
+{% block body %}
+	<div class="row top-container">
+
+		<div class="top-header ">Change Password</div>
+	</div>
+	<div class="row">
+		<form action="{{path('changeAdminPassword')}}" method="POST">
+			<div class="col col-md-6">
+				{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+				<div class="form-item-container">
+								<label class="form-item-Label">Old Password</label>
+								<input class="form-item-input" type="text" name="oldPassword" required="required"></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">New Password</label>
+								<input class="form-item-input" type="text" name="newPassword" required="required"></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Confirm Password</label>
+								<input class="form-item-input" type="text" name="confirmPassword" required="required"></input>
+							</div>
+			</div>
+			<div class="col col-md-6 ">
+				<button class="button-primary change-password" type="submit">Change</button>
+			</div>
+		</form>
+	</div>
+	
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+.display-details-table{
+			width:80%;
+			font-size: 1.7rem;
+			margin-top:25px;
+			border-spacing: 10px;
+		}
+		.display-details-table tr {
+			
+			margin-bottom: 10px;
+		}
+		.display-details-table tr:nth-child(odd) {
+			background-color:#f3e5dd;		
+		}
+		.display-details-table tr td{
+			padding-left: .5em;
+			text-align: left;
+			 padding-top: .5em;
+    padding-bottom: .5em;
+			
+		}
+		.change-password{
+			margin-top: 10%;
+		}
+		.support-image{
+			margin-right:10px;
+		}
+		</style>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		
+   
+    
+});
+</script>
+{% endblock %}

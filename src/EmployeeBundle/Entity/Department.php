@@ -28,12 +28,7 @@ class Department
      */
     private $departmentName;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="departmentRole", type="string", length=255)
-     */
-    private $departmentRole;
+
 
     /**
      * @var string
@@ -77,29 +72,7 @@ class Department
         return $this->departmentName;
     }
 
-    /**
-     * Set departmentRole
-     *
-     * @param string $departmentRole
-     *
-     * @return Department
-     */
-    public function setDepartmentRole($departmentRole)
-    {
-        $this->departmentRole = $departmentRole;
-
-        return $this;
-    }
-
-    /**
-     * Get departmentRole
-     *
-     * @return string
-     */
-    public function getDepartmentRole()
-    {
-        return $this->departmentRole;
-    }
+    
 
         /**
      * Set departmentHead

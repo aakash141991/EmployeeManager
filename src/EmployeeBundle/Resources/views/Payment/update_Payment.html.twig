@@ -1,8 +1,12 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Payment{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
 			Update Employee Payment
+		</div>
+		<div class="admin-top-support">
+			<button class="button-primary go-back" data-id="{{employee.nID}}">Go Back</button>
 		</div>
 
 				{% if employee %}
@@ -34,16 +38,17 @@
 						<div class="display-payment-heading">
 							Payment Details
 						</div>
-						<form action="" method="post">
+						<form action="{{path('updatePaymentSubmit')}}" method="post">
+							<input type="hidden" name="empId" value="{{ employee.nID }}">
 							<table class="display-data-table " >
 							<tbody>
+
 								
 							<tr><td>Basic Pay</td><td  ><input style="text-align:right;" type="number" name="basic_salary" value="{{payment.basicSalary}}"></td></tr>
 							<tr><td>HRA</td><td><input style="text-align:right;" type="number" name="hra" value="{{payment.hra}}"></td></tr>
 							<tr><td>Special Allowance</td><td><input style="text-align:right;" type="number" name="special_allowance" value="{{payment.specialAllowance}}"></td></tr>
 							<tr><td>Conveyance Allowance</td><td><input  style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.conveyanceAllowance}}"></td></tr>
-							<tr><td>PF Contribution</td><td><input style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.pfContribution}}"></td></tr>
-							<tr><td>Income Tax Deduction</td><td><input  style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.incomeTax}}"></td></tr>
+							
 								
 							</tbody>
 						</table>
@@ -52,6 +57,32 @@
 						
 						</form>
 						
+
+				</div>
+				<div class="col col-md-6 last-row-col">
+					<div class="display-payment-heading">
+							Deductions Calculated
+						</div>
+						<table class="display-data-table " >
+							<tbody><tr>
+								<td>PF Contribution</td><td><input class="read-only-input" style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.pfContribution}}" readonly></td>
+							</tr>
+							<tr><td>Income Tax Deduction</td><td><input   class="read-only-input" style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.incomeTax}}" readonly></td></tr></tbody>
+							
+						</table>
+					<div class="display-payment-heading">
+							Deductions Calculated
+						</div>
+						<table class="display-data-table " >
+							<tbody><tr>
+								<td>Total Earnings</td><td><input class="read-only-input" style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.totalEarning}}" readonly></td>
+							</tr>
+							<tr><td>Total Deduction</td><td><input   class="read-only-input" style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.totalDeduction}}" readonly></td></tr>
+
+							<tr><td>Netsalary</td><td><input   class="read-only-input" style="text-align:right;" type="number" name="conveyance_allowance" value="{{payment.netSalary}}" readonly></td></tr>
+						</tbody>
+							
+						</table>
 
 				</div>
 			{% else %}
@@ -89,7 +120,7 @@
 		text-align: center;
 	}  
 	.update-button-container{
-		text-align: right;
+		text-align: left;
 	}
 	.add-payment-container{
 		margin-top: 20px;
@@ -98,3 +129,16 @@
 
 	  	</style>
   {% endblock %}
+  {% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+			$('.go-back').click(function(){
+				var empId = $(this).attr('data-id');
+				window.location = location.origin + "/auth/getEmployeeDetails/"+empId;
+			});
+		});
+
+</script>
+{% endblock %}

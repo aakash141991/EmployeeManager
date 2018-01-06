@@ -59,6 +59,15 @@
     width:7rem;
     font-weight: 600;
     }
+    .page-loading {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url(/page_loader.gif) center no-repeat #fff;
+}
       .paginate_button:hover{
          background-color:  darkcyan;
     border-color: darkcyan;
@@ -131,6 +140,9 @@
         .last-row-col{
             margin-bottom: 100px;
         }
+        .read-only-input{
+             background-color : #d1d1d1;
+        }
 /*modal*/
 .modal-header{
     background-color: darkcyan;
@@ -164,6 +176,8 @@
             margin-left: 10px;
             width:23rem;
            height:10rem;
+           
+           
         }
         .form-apply-button-container{
             text-align: center;
@@ -239,32 +253,13 @@
     margin-bottom: 10px;
 
    }
+   .top-support-buttons{
+    list-style: none;
+    display: inline-block;
+    margin-right: 30px;
+    
+   }
  
-   @media screen and (max-width: 420px) {
-          #mobile-menu{
- width:0px;
-    height:0px;
-    background-color: grey;
-    right:10%;
-    top:20%;
-    position: fixed;
-    z-index: 800;
-        -webkit-transition: width 2s, height 4s; /* For Safari 3.1 to 6.0 */
-    transition: width 2s, height 4s;
-   }
-   }
-   @media screen and (min-width: 421px) and (max-width: 720px) {
-          #mobile-menu{
-            overflow:hidden;
-    width:0px;
-    height:0px;
-    background-color: grey;
-    right:10%;
-    top:20%;
-    position: fixed;
-    z-index: 800;
-        -webkit-transition: width 2s, height 4s; /* For Safari 3.1 to 6.0 */
-    transition: width 2s, height 4s;
-   }
+  
 
    }

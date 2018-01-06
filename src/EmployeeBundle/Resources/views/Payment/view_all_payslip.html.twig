@@ -1,0 +1,110 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Payment{% endblock %}
+{% block body %}
+	<div class="row top-container">
+
+		<div class="top-header ">All Pay Slips</div>
+	</div>
+	<div class="admin-top-support">
+		<button class="button-primary go-back" data-id="{{employee.nID}}">Go Back</button>
+
+	</div>
+			{% if employee %}
+			
+						<div class="col-md-12 employee-details-container">
+								<table class="display-data-table" id="">
+								<thead>
+									<tr>
+									<th>Employee Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Designation</th>
+								</tr>
+								</thead>
+								<tbody>
+					       			 <tr>
+					       			 	<td>{{ employee.name }}</td>
+					       			 	<td>{{ employee.email }}</td>
+					       			 	<td>{{ employee.phone}}</td>
+					       			 	{% if employee.designation %}
+						<td>{{ employee.designation.name}}</td>
+					{% else %}
+						<td>Not set</td>
+				{% endif %}	
+					       			 </tr>
+							
+								</tbody>
+							</table>
+						</div>
+			{% endif %}
+		<div class="top-header ">List of All payslips</div>
+			<div class="col col-md-12 table-container all-pays">
+			<table class="display-data-table" id="displayTableSecond">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Month</th>
+				<th>Year</th>
+				<th>Action</th>
+				
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for paySlip in paySlipAll %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ date('20-'~ paySlip.month ~ '-'~ paySlip.year) | date('M') }}</td>
+       			 	<td>{{ paySlip.year }}</td>
+       			 	<td><button class="button-form-type download-payslip"  data-id="{{paySlip.id}}">Download</button></td>
+       			 	
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+		</div>
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+	
+
+	</style>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+	 $(document).ready(function () { 
+	 	
+	 	$('.go-back').click(function(){
+	 		var empId=$(this).attr('data-id');
+				window.location = location.origin + "/auth/getEmployeeDetails/"+empId;
+			});
+	 	$('.download-payslip').click(function(){
+	 				var payslipId =  $(this).attr('data-id');
+	 				var Url=location.origin + "/auth/getPayslipUrl/"+payslipId;
+		        	$.ajax({url: Url, success: function(result){
+
+		        		if(result.allowed == 'true'){
+		        			var link = document.createElement("a");
+						    
+						    var filePath = result.filepath;
+						   var assetpath= filePath.substring(filePath.indexOf("payslips"));
+
+						   link.href = "/"+assetpath;
+						  
+						   link.click();
+		        		}
+		        		
+		        		
+    			}});
+			    
+ 		
+	 	});
+	 	
+	 });
+</script>
+{% endblock %}

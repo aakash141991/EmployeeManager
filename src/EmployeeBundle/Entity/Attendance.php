@@ -63,6 +63,13 @@ class Attendance
      */
     private $presentDays;
 
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="salaryDeducted", type="float",nullable=true)
+     */
+    private $salaryDeducted;
+
 
 
     /**
@@ -89,6 +96,29 @@ class Attendance
         return $this;
     }
 
+     /**
+     * Set salaryDeducted
+     *
+     * @param float $salaryDeducted
+     *
+     * @return Attendance
+     */
+    public function setSalaryDeducted($salaryDeducted)
+    {
+        $this->salaryDeducted = $salaryDeducted;
+
+        return $this;
+    }
+
+    /**
+     * Get salaryDeducted
+     *
+     * @return float
+     */
+    public function getSalaryDeducted()
+    {
+        return $this->salaryDeducted;
+    }
     /**
      * Get employeeId
      *

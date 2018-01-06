@@ -1,0 +1,64 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Announcement{% endblock %}
+{% block body %}
+<div class="row top-container">
+		<div class=" top-header">
+			Add Announcement
+		</div>
+
+		<div class="admin-top-support">
+			<button class="button-primary go-back" >Go Back</button>
+		</div>
+
+		<form action="{{path('addAnnouncementSubmit')}}" method="POST">
+
+		<div class="row">
+							
+
+			<div class="col col-md-6">
+				<div class="form-item-container">
+								<label class="form-item-Label">Title</label>
+								<input class="form-item-input"  type="text" name="title"  required="required"></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Description</label>
+								<input class="form-item-input-address" type="text" name="description"  required="required"></input>
+							</div>
+				
+							
+							
+			</div>
+			<div class="col col-md-6">
+				
+							
+							
+
+							
+			</div>
+		</div>
+		<div class="row">
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Save</button>
+						</div>
+					</div>
+
+		</form>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		
+			$('.go-back').click(function(){
+				
+				window.location=location.origin + "/auth/announcements";
+			});
+		
+
+	});
+
+</script>
+{% endblock %}

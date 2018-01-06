@@ -9,9 +9,12 @@ use EmployeeBundle\Entity\PaySlip;
 use EmployeeBundle\Entity\Employee;
 use EmployeeBundle\Entity\Attendance;
 use EmployeeBundle\Entity\Payment;
+use EmployeeBundle\Entity\ClaimedDeduction;
+use EmployeeBundle\Entity\TaxSlab;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use \DateTime;
 
 class PaymentController extends Controller
@@ -81,13 +84,14 @@ class PaymentController extends Controller
             }
           }
            if($allowedAccess == 'true'){
-
+                $allEmployees=$this->getDoctrine()->getRepository(Employee::class)->findAll();
             return $this->render('EmployeeBundle:Payment:generate_payslip.html.twig', array(
                   'employee'=>'',
                 'payment'=>'',
                 'attendance'=>'',
                 'errorMessage'=>'',
                 'message'=>'',
+                'allEmployees'=>$allEmployees,
                 ));
 
             }else{
@@ -113,21 +117,17 @@ class PaymentController extends Controller
            if($allowedAccess == 'true'){
             $employee="";
             $payment="";
-             $employees = $this->getDoctrine()->getRepository(Employee::class)->findBy(
+             $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(
                 array('nID' => $empId, )
               );
 
-              $payments = $this->getDoctrine()->getRepository(Payment::class)->findBy(
+              $payment = $this->getDoctrine()->getRepository(Payment::class)->findOneBy(
                 array('employeeId' => $empId, )
               );
-              foreach($employees as $empl){
-              $employee = $empl;
-              break;
-            }
-            foreach($payments as $paymt){
-              $payment = $paymt;
-              break;
-            }
+            /*  calculate Tax*/
+
+
+             /**/
 
             return $this->render('EmployeeBundle:Payment:update_Payment.html.twig', array(
                   'employee'=>$employee,
@@ -140,20 +140,154 @@ class PaymentController extends Controller
         
     }
 
+           /**
+     * @Route("/auth/update-payment-submit",name="updatePaymentSubmit")
+     */
+    public function updatePaymentSubmitAction(Request $request)
+    {
+            $user = $this->getUser();
+              $allowedAccess = 'false';
+              $roles= $user->getRoles();
+          foreach($roles as $role){
+            if($role == "ROLE_PF"){
+              $allowedAccess = 'true';
+              break;
+            }
+          }
+
+           if($allowedAccess == 'true'){
+            $empId=$request->request->get('empId');
+            $employee="";
+            $payment="";
+             $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(
+                array('nID' => $empId, )
+              );
+
+              $payment = $this->getDoctrine()->getRepository(Payment::class)->findOneBy(
+                array('employeeId' => $empId, )
+              );
+              $claimed_Deductions = $this->getDoctrine()->getRepository(ClaimedDeduction::class)->findBy(
+                array('employeeId' => $empId,
+                  'isApproved'=>1,)
+              );
+              $pfRate =10;
+              $claimed_Deduction = 0;
+              if(isset($claimed_Deductions)){
+                foreach ( $claimed_Deductions as $deduct) {
+                  $claimed_Deduction =  $claimed_Deduction + $deduct->getDeduction();
+                }
+              }
+              if(isset($payment)){
+                  $isUpdate = 'true';
+              }else{
+                $isUpdate = 'false';
+                $payment=new Payment();
+              }
+
+            /*  calculate Tax*/
+              $taxSlabs = $this->getDoctrine()->getRepository(TaxSlab::class)->findAll();
+              $basicPay = $request->request->get('basic_salary');
+              $hra = $request->request->get('hra');
+              $special_allowance = $request->request->get('special_allowance');
+              $conveyance_allowance = $request->request->get('conveyance_allowance');
+
+              $totalEarning = $basicPay + $hra + $special_allowance +$conveyance_allowance;
+              $estimated_income = $totalEarning * 12;
+              
+              $taxableIncome = $estimated_income - $claimed_Deduction;
+
+              $taxRate = 0;
+              $cessRate =0;
+              foreach ($taxSlabs as $taxSlab) {
+                if($taxableIncome > $taxSlab->getIncomeFrom()){
+                    if($taxSlab->getIncomeUpto() == 0){
+                      $taxRate = $taxSlab->getTaxRate();
+                       $cessRate=$taxSlab->getCess();
+                      break;
+                    }elseif($taxableIncome <= $taxSlab->getIncomeUpto()){
+                      $taxRate = $taxSlab->getTaxRate();
+                       $cessRate=$taxSlab->getCess();
+                      break;
+                    }
+
+                  }
+              }
+
+              $it_deduction = ($taxRate /100)*$taxableIncome;
+
+              $pf_deduction = ($pfRate/100)*$basicPay;
+              
+              $cess= ($cessRate /100)*$it_deduction ;
+
+              $totalTax = $it_deduction + $cess ;
+              $tdaRate= ($totalTax*100)/$taxableIncome;
+              $tdaCalculated = ($tdaRate/100)*$totalEarning;
+              $netSalary = $totalEarning - ($tdaCalculated+$pf_deduction);
+
+             /**/
+             $payment->setBasicSalary($basicPay);
+             $payment->setHra($hra);
+             $payment->setSpecialAllowance($special_allowance);
+               $payment->setConveyanceAllowance($conveyance_allowance);
+               $payment->setPfContribution($pf_deduction);
+               $payment->setIncomeTax($tdaCalculated);
+               $payment->setTotalEarning($totalEarning);
+               $payment->setTotalDeduction($tdaCalculated);
+               
+               $payment->setNetSalary($netSalary);
+               if($isUpdate == 'true'){
+                 $en = $this->getDoctrine()->getManager();
+                $en->merge($payment);
+                $en->flush();
+               }else{
+                $en = $this->getDoctrine()->getManager();
+                $en->persist($payment);
+                $en->flush();
+               }
+              
+
+
+            return $this->render('EmployeeBundle:Payment:update_Payment.html.twig', array(
+                  'employee'=>$employee,
+                  'payment'=>$payment,
+                ));
+
+            }else{
+                    return $this->redirectToRoute('accessDenied',array());
+            }
+        
+    }
+    
+
        /**
      * @Route("/auth/getPayslipUrl/{payslipId}",name="getPaySlipUrl")
      */
     public function getPayslipUrl($payslipId)
     {
-            $user = $this->getUser();
+        
+
+              $user = $this->getUser();
               $allowedAccess = 'false';
+              $roles= $user->getRoles();
+          foreach($roles as $role){
+            if($role == "ROLE_PF"){
+              $allowedAccess = 'true';
+              break;
+            }
+          }
+              
               $file_path ="";
              $paySlip = $this->getDoctrine()->getRepository(PaySlip::class)->find($payslipId);
              if($paySlip -> getEmployeeId() == $user->getNID()){
-              $file_path = $paySlip -> getDestination();
+             
                $allowedAccess = 'true';
             }
-          
+            if($allowedAccess=='true'){
+              $file_path = $paySlip -> getDestination();
+            }else{
+              return $this->redirectToRoute('accessDenied',array());
+            }
+           
              
              
            return new JsonResponse(array(
@@ -168,7 +302,7 @@ class PaymentController extends Controller
        /**
      * @Route("/auth/getEmployeeDetails/{empId}",name="getEmployeeDetailPayment")
      */
-    public function getEmployeeDetailPayment($empId)
+    public function getEmployeeDetailPayment($empId,Request $request)
     {
              $user = $this->getUser();
               $allowedAccess = 'false';
@@ -187,28 +321,33 @@ class PaymentController extends Controller
 
            if($allowedAccess == 'true'){
             try{
+              $previous= $request->query->get('previous');
 
-                 $employees = $this->getDoctrine()->getRepository(Employee::class)->findBy(
+               $currentDate = new DateTime();
+              $currentMonth = date_format($currentDate, 'm');
+              $currentYear = date_format($currentDate, 'Y');
+
+                 $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(
                 array('nID' => $empId, )
               );
-            $payments = $this->getDoctrine()->getRepository(Payment::class)->findBy(
+            $payment = $this->getDoctrine()->getRepository(Payment::class)->findOneBy(
                 array('employeeId' => $empId, )
               );
-             $attendances = $this->getDoctrine()->getRepository(Attendance::class)->findBy(
-                array('employeeId' => $empId, )
+
+            if((isset($previous))&&($previous == "previous")){
+              $currentMonth = $currentMonth-1;
+              if($currentMonth == 0){
+                 $currentMonth = 12;
+                 $currentYear = $currentYear -1;
+
+              }
+            }
+             $attendance = $this->getDoctrine()->getRepository(Attendance::class)->findOneBy(
+                array('employeeId' => $empId,
+                'month'=>$currentMonth, 
+                'year'=>$currentYear,  )
               );
-             foreach($attendances as $attnd){
-              $attendance = $attnd;
-              break;
-            }
-            foreach($employees as $empl){
-              $employee = $empl;
-              break;
-            }
-             foreach($payments as $paymt){
-              $payment = $paymt;
-              break;
-            }
+            
 
 
             }catch (\Exception $e){
@@ -227,6 +366,7 @@ class PaymentController extends Controller
                 'attendance'=>$attendance,
                 'errorMessage'=>$errorMessage,
                 'message'=>$message,
+                'allEmployees'=>'',
                 ));
 
             }else{
@@ -241,7 +381,7 @@ class PaymentController extends Controller
        /**
      * @Route("/auth/generate-Payslip-submit/{empId}",name="generatePaySlipSubmit")
      */
-    public function generatePayslipSubmitAction($empId)
+    public function generatePayslipSubmitAction($empId,Request $request)
     {
 
        /* check user access*/
@@ -262,41 +402,42 @@ class PaymentController extends Controller
            $errorMessage="";
            $message="";
 
-           /*initializing variables end*/
+          
 
 
            if($allowedAccess == 'true'){
 
               try{
+                   $previous= $request->query->get('previous');
 
+                   $currentDate = new DateTime();
+                $currentMonth = date_format($currentDate, 'm');
+                $currentYear = date_format($currentDate, 'Y');
                 /*fetching employee details*/
-                 $employees = $this->getDoctrine()->getRepository(Employee::class)->findBy(
+                 $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(
                 array('nID' => $empId, )
               );
-                 $payments = $this->getDoctrine()->getRepository(Payment::class)->findBy(
+                 $payment = $this->getDoctrine()->getRepository(Payment::class)->findOneBy(
                 array('employeeId' => $empId, )
               );
-                $attendances = $this->getDoctrine()->getRepository(Attendance::class)->findBy(
-                array('employeeId' => $empId, )
+                 if((isset($previous))&&($previous == "previous")){
+              $currentMonth = $currentMonth-1;
+              if($currentMonth == 0){
+                 $currentMonth = 12;
+                 $currentYear = $currentYear -1;
+
+              }
+            }
+                $attendance = $this->getDoctrine()->getRepository(Attendance::class)->findOneBy(
+                array('employeeId' => $empId,
+                'month'=>$currentMonth,
+                'year'=>$currentYear, )
               );
-             foreach($attendances as $attnd){
-              $attendance = $attnd;
-              break;
-            }
-            foreach($employees as $empl){
-              $employee = $empl;
-              break;
-            }
-             foreach($payments as $paymt){
-              $payment = $paymt;
-              break;
-            }
+            
               /*fetching employee details ends*/
              /* getting current month payslip if already generated*/
 
-               $currentDate = new DateTime();
-                $currentMonth = date_format($currentDate, 'm');
-                $currentYear = date_format($currentDate, 'Y');
+               
                $paySlipCurrent = $this->getDoctrine()->getRepository(PaySlip::class)->findBy(
                 array('employeeId' => $empId,
                 'month'=>$currentMonth ,
@@ -309,14 +450,19 @@ class PaymentController extends Controller
               break;
             }
             /*getting current month payslip ends*/
+            $dateObj   = DateTime::createFromFormat('!m', $currentMonth);
+            $monthName = $dateObj->format('F');
 
-
-            if(isset($payslip)){
-              $errorMessage= "Payslip for this Month has already been generated";
+            if($user->getNID() != $empId){
+                if(isset($payslip)){
+              $errorMessage= "Payslip for ".$monthName." has already been generated";
+            }elseif(!isset($attendance)){
+                $errorMessage= "Please Update Attendance for".$monthName." before Generating payslip";
             }else{
+              $filename=$empId . '_' . $currentMonth . '_' . $currentYear . 'pay.pdf';
 
-               $path = $this->getParameter('kernel.root_dir') . '/web/payslips/aakash_file.pdf';
-               
+              // $path = $this->getParameter('kernel.root_dir') . '/web/payslips/'.$filename;
+              $path = $this->getParameter('kernel.root_dir') . '/../web/payslips/' . $filename;
                   $payslip = new PaySlip();
                   $payslip->setDestination($path);
                    $payslip->setEmployeeId($empId);
@@ -343,7 +489,34 @@ class PaymentController extends Controller
                     $en->persist($payslip);
                     $en->flush();
 
+
+                    $name = $employee->getName();
+                        $subject="Pay Slip for ". $monthName ."-". $currentYear;
+                      $viewPath='EmployeeBundle:MailBody:paySlip_generated.html.twig';
+            
+                      //$toEmail =$manager->getEmail();
+                      $toEmail= $employee->getEmail();
+                      $fromEmail="admin@nettantra.net";
+                        
+                      $email = \Swift_Message::newInstance()
+                      ->setSubject($subject)
+                      ->setFrom($fromEmail)
+                      ->setTo($toEmail)
+                      ->setBody(
+                          $this->renderView(
+                              $viewPath,
+                              array('name' => $name,)
+                          ),'text/html');
+                      $email->attach(\Swift_Attachment::fromPath($path));
+                       $this->get('mailer')->send($email);
+                      }
+            }else{
+                $errorMessage= "Self payslip cannot be generated";
             }
+            
+                      
+
+            
 
             }catch (\Exception $e){
                 
@@ -362,6 +535,7 @@ class PaymentController extends Controller
                 'attendance'=>$attendance,
                 'errorMessage'=>$errorMessage,
                   'message'=>$message,
+                  'allEmployees'=>'',
                 ));
 
             }else{
@@ -371,5 +545,58 @@ class PaymentController extends Controller
     }
 
     
+ /**
+     * @Route("/auth/full-pay-details/{empId}",name="fullPayDetails")
+     */
+    public function fullPayDetailAction($empId)
+    {
+             $user = $this->getUser();
+              $allowedAccess = 'false';
+              $roles= $user->getRoles();
+          foreach($roles as $role){
+            if($role == "ROLE_PF"){
+              $allowedAccess = 'true';
+              break;
+            }
+          }
+          $employee ="";
+          $payslips="";
+
+
+           if($allowedAccess == 'true'){
+            try{
+
+
+                 $employee = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(
+                array('nID' => $empId, )
+              );
+          $payslips = $this->getDoctrine()->getRepository(PaySlip::class)->findBy(
+                array('employeeId' => $empId, )
+              );
+            
+            
+
+
+            }catch (\Exception $e){
+                
+               $employee ="";
+                $payslips="";
+
+               }
+           
+
+            return $this->render('EmployeeBundle:Payment:view_all_payslip.html.twig', array(
+                'employee'=>$employee,
+                'paySlipAll'=>$payslips,
+                ));
+
+            }else{
+                    return $this->redirectToRoute('accessDenied',array());
+            }
+         
+            
+        
+    }
+
 
 }

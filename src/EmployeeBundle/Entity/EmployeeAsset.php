@@ -3,6 +3,7 @@
 namespace EmployeeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use EmployeeBundle\Entity\AssetTypes;
 
 /**
  * EmployeeAsset
@@ -36,11 +37,20 @@ class EmployeeAsset
     private $employeeName;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="assetType", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="AssetTypes", inversedBy="employeeAssets")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $assetType;
+
+       public function getAssetType()
+    {
+        return $this->assetType;
+    }
+
+    public function setAssetType(AssetTypes $assetType)
+    {
+        $this->assetType = $assetType;
+    }
 
     /**
      * @var bool
@@ -63,19 +73,7 @@ class EmployeeAsset
      */
     private $isRejected;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="assetId", type="string", length=255, nullable=true)
-     */
-    private $assetId;
-
-     /**
-     * @var int
-     *
-     * @ORM\Column(name="assetTypeId", type="integer")
-     */
-    private $assetTypeId;
+    
 
      /** 
         @ORM\Column(name="fromDate",type="string", length=255)
@@ -94,30 +92,7 @@ class EmployeeAsset
         return $this->id;
     }
 
-     /**
-     * Get assetTypeId
-     *
-     * @return int
-     */
-    public function getAssetTypeId()
-    {
-        return $this->assetTypeId;
-    }
-
-    /**
-     * Set assetTypeId
-     *
-     * @param int $assetTypeId
-     *
-     * @return EmployeeAsset
-     */
-    public function setAssetTypeId($assetTypeId)
-    {
-        $this->assetTypeId = $assetTypeId;
-
-        return $this;
-    }
-
+    
     /**
      * Set employeeId
      *
@@ -165,29 +140,7 @@ class EmployeeAsset
     {
         return $this->employeeName;
     }
-    /**
-     * Set assetType
-     *
-     * @param string $assetType
-     *
-     * @return EmployeeAsset
-     */
-    public function setAssetType($assetType)
-    {
-        $this->assetType = $assetType;
-
-        return $this;
-    }
-
-    /**
-     * Get assetType
-     *
-     * @return string
-     */
-    public function getAssetType()
-    {
-        return $this->assetType;
-    }
+   
 
     /**
      * Set isAssigned

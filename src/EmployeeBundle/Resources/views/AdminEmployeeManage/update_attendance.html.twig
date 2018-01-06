@@ -1,0 +1,137 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}Attendance{% endblock %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Update Attendance
+		</div>
+		{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+</div>
+<div class="admin-top-support">
+			<button class="button-primary go-back" data-id="{{employee.nID}}">Go Back</button>
+		</div>
+		
+
+<div class="row upload-from-file" >
+	<div class="display-leave-header top-header">
+			Upload from file
+		</div>
+	<form action="/admin/update-attendance-submit/{{employee.nID}}" method="post" enctype="multipart/form-data" >
+		<div class="col col-md-6">
+			<div class="form-item-container">
+								<label class="form-item-Label">Upload CSV file</label>
+								<input class="form-item-input" type="file" name="attendanceReport" required="required" ></input> 
+
+							</div>
+							<input type="hidden" value="{{employee.nID}}" name="empId">
+							<input type="hidden" value="{{showPrevious}}" name="showPrevious">
+							
+							
+					
+		</div>
+		<div class="col col-md-6">
+			<div class="form-item-container">
+					<label class="form-item-Label">Month</label>
+					{% if attendance %}		
+					  {% if attendance.month < 10 %}
+			<input class="form-item-input" type="month"  value="{{attendance.year}}-0{{attendance.month}}" name="month_selected" required="required" ></input>
+			{% else  %}
+				<input class="form-item-input" type="month"  value="{{attendance.year}}-{{attendance.month}}" name="month_selected" required="required" ></input>
+			{% endif %}
+			{% else  %}
+				<input class="form-item-input" type="month"   name="month_selected" required="required" ></input>
+			{% endif %}
+			</div>
+							
+			
+					
+		</div>
+		<div class="col-md-12 form-apply-button-container"><button class="button-primary" type="submit">Upload</button></div>
+	</form>
+
+	
+</div>
+<div class="row">
+	<div class="display-leave-header top-header">
+			Set attendance manually 
+		</div>
+		<form action="/admin/update-attendance-input/{{employee.nID}}" method="post">
+		<div class="col col-md-6">
+			<div class="form-item-container">
+					<label class="form-item-Label">Employee Id</label>
+					  <input class="form-item-input read-only-input" type="text" name="empId" value="{{employee.nID}}" readonly ></input> 
+			</div>
+			<div class="form-item-container">
+					<label class="form-item-Label">Total Days</label>
+					 {% if attendance %}	
+						<input class="form-item-input" value="{{attendance.totalDays}}" type="number" name="total_days" required="required"  ></input> 
+						{% else  %}
+							<input class="form-item-input" type="number" name="total_days" required="required"  ></input> 
+							{% endif %}
+			</div>
+			
+
+					
+		</div>
+		<div class="col col-md-6">
+			<div class="form-item-container">
+					<label class="form-item-Label">Month</label>
+					 {% if attendance %}		
+					  {% if attendance.month < 10 %}
+			<input class="form-item-input" type="month"  value="{{attendance.year}}-0{{attendance.month}}" name="month_selected" required="required" ></input>
+			{% else  %}
+				<input class="form-item-input" type="month"  value="{{attendance.year}}-{{attendance.month}}" name="month_selected" required="required" ></input>
+			{% endif %}
+			{% else  %}
+				<input class="form-item-input" type="month"   name="month_selected" required="required" ></input>
+			{% endif %}
+			</div>
+			<div class="form-item-container">
+					<label class="form-item-Label">Present Days</label>
+					  
+					{% if attendance %}	
+						 <input class="form-item-input" type="number" value="{{attendance.presentDays}}" name="present_days" required="required"  ></input>  
+						{% else  %}
+						<input class="form-item-input" type="number"  name="present_days" required="required"  ></input> 
+
+						{% endif %} 
+			</div>
+					
+		</div>
+		<div class="col-md-12 form-apply-button-container"><button class="button-primary" type="submit">Submit</button></div>
+	</form>
+</div>
+
+{% endblock %}
+  {% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+			$('.go-back').click(function(){
+				var empId = $(this).attr('data-id');
+				window.location = location.origin + "/admin/manage-attendance/"+empId;
+			});
+		});
+
+</script>
+{% endblock %}
+{% block stylesheets %}
+	<style type="text/css">
+
+	.upload-from-file{
+		margin-bottom: 10px;
+		
+	}
+
+ </style>
+
+{% endblock %}

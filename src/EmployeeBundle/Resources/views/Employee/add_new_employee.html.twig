@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Employee{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
@@ -7,6 +8,15 @@
 					<div class="col col-md-12 asset-form-wrapper">
 					<form action="{{ path('submitNewEmployee') }}" method="post">
 					<div class="row">
+						{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
 						<div class="col col-md-6">
 							<div class="form-item-container">
 								<label class="form-item-Label">Employee Id</label>
@@ -18,12 +28,18 @@
 							</div>
 							<div class="form-item-container">
 								<label class="form-item-Label">Address</label>
-								<input class="form-item-input-address" type="text" name="address" required="required" ></input>
+								
+								<textarea rows="4" cols="30"  name="address" required="required"></textarea>
 							</div>
 							<div class="form-item-container">
 								<label class="form-item-Label">Manager Id</label>
-								<input id="employee_search" class="form-item-input" type="text" name="managerNid" required="required" ></input>
-								<div id="suggest"></div>
+								<input id="employee_searching" list="suggestions" class="form-item-input" type="text" name="managerNid" required="required" ></input>
+								<datalist id="suggestions">
+									 {% for employee in  allEmployees%}
+									  <option value="{{employee.nID}}">{{employee.name}}</option>					
+									  {% endfor %}
+								</datalist>
+									<div id="suggest"></div>
 							</div>
 							<div class="form-item-container">
 								<label class="form-item-Label">Date Of Birth</label>
@@ -43,11 +59,11 @@
 								<input class="form-item-input" type="number" pattern="[0-9]" name="phone" required="required" ></input>
 							</div>
 							<div class="form-item-container">
-								<label class="form-item-Label">Employee Desgnation</label>
+								<label class="form-item-Label">Employee Designation</label>
 								<select class="form-input-option" name="designation"> 
 									<options>
 										{% for designation in designations %}
-										<option   value="{{ designation.name}}">{{ designation.name}}</option>
+										<option   value="{{ designation.id}}">{{ designation.name}}</option>
 										{% endfor %}
 									</options>
 								</select>
@@ -67,7 +83,7 @@
 								
 							</div>
 							<div class="form-item-container">
-								<label class="form-item-Label">Employee Desgnation</label>
+								<label class="form-item-Label">Employee Roles</label>
 								<select  multiple class="form-input-option"  name="role[]"> 
 									<options>
 										{% for role in roles %}

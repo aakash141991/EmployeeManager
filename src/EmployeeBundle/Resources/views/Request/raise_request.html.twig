@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Request{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
@@ -44,10 +45,11 @@
 					<div class="row">
 						<div class="form-item-description">
 									<label class="form-item-description-Label">Description</label>
-									<input class="form-item-description-input" type="text" name="description" required="required" pattern="[A-Za-z0-9]{1,200}"  ></input>
+									
+									<textarea rows="4" cols="50" name="description" required="required" ></textarea>
 								</div>
 						<div class="col-md-12 form-apply-button-container">
-							<button class="button-primary" type="submit">Request</button>
+							<button class="button-primary form-submit" type="submit">Request</button>
 						</div>
 					</div>
 			</form>

@@ -64,31 +64,37 @@ class RequestController extends Controller
     	$user = $this->getUser();
     	$title= $request->request->get('title');
     	$description=$request->request->get('description');
-    	$department=$request->request->get('department_id');
+    	$department_id=$request->request->get('department_id');
 
     	$requestTicket = new RequestTicket();
     	$requestTicket->setDescription($description);
     	$requestTicket->setTitle($title);
     	$requestTicket->setStatus('pending');
     	$requestTicket->setCreated(new DateTime());
-    	$requestTicket->setDepartment($department);
+    	$requestTicket->setDepartment($department_id);
     	$requestTicket->setEmployeeId($user->getNID());
-    	if(($title == "")||($description=="")||($department == "")){
+    	if(($title == "")||($description=="")||($department_id == "")){
     			 $message="";
                $errorMessage= "Please fill all the fields before submitting";
     	}else{
 
+        $department = $this->getDoctrine()->getRepository(Department::class)->find($department_id);
+        $requestTicket->setAssignedTo( $department->getDepartmentHead());
+        $depart_head = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(
+          array('nID'=>$department->getDepartmentHead()));
     	$en = $this->getDoctrine()->getManager();
                 $en->persist($requestTicket);
                 $en->flush();
                 $message="Your Request ticket has been successfully submitted";
                $errorMessage= "";
+
+               if(isset($depart_head )){
                 /* Send Mail*/
-              $subject="Request Ticket created";
+              $subject="New Request Ticket created";
               $viewPath='EmployeeBundle:MailBody:request_success.html.twig';
               $fromEmail='admin@nettantra.net';
-              $toEmail=$user->getEmail();
-              $name=$user->getName();
+              $toEmail=$depart_head->getEmail();
+              $name=$depart_head->getName();
 
                 $email = \Swift_Message::newInstance()
                 ->setSubject($subject)
@@ -100,14 +106,16 @@ class RequestController extends Controller
                         array('name' => $name,'title' => $title,)
                     ),'text/html');
                  $this->get('mailer')->send($email);
+               }
+                
     	}
 
 
         }catch (\Exception $e){
                 
                 $message="";
-                /*$errorMessage= $e->getMessage();*/
-               $errorMessage= "something went wrong. Please fill the form properly";
+               $errorMessage= $e->getMessage();
+               //$errorMessage= "something went wrong. Please fill the form properly";
               
                }
         return $this->redirectToRoute('raiseRequests',array(

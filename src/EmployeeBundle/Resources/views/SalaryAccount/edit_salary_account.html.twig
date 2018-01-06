@@ -1,0 +1,91 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Salary Account{% endblock %}
+{% block body %}
+<div class="row top-container">
+		<div class=" top-header">
+			Add Salary Account
+		</div>
+
+		<div class="admin-top-support">
+			<button class="button-primary go-back" >Go Back</button>
+		</div>
+
+		<form action="{{path('editSalaryAccountSubmit')}}" method="POST">
+
+		<div class="row">
+							
+			{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+			<div class="col col-md-6">
+
+				<input type="hidden" name="salaryAcId" value="{{salaryAc.id}}">
+				<div class="form-item-container">
+								<label class="form-item-Label">Employee Id</label>
+								<input id="employee_searching" list="suggestions" class="form-item-input" type="text" value="{{salaryAc.employeeId}}" name="empId" required="required" ></input>
+									<datalist id="suggestions">
+									 {% for employee in  allEmployees%}
+									  <option value="{{employee.nID}}">{{employee.name}}</option>					
+									  {% endfor %}
+								</datalist>
+									
+							</div>
+				
+							<div class="form-item-container">
+								<label class="form-item-Label">Account Number</label>
+								<input class="form-item-input" type="number" value="{{salaryAc.accountNumber}}" name="acNo"  required="required"></input>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">Confirm Account Number</label>
+								<input class="form-item-input" type="number" name="confirmAcNo" value="{{salaryAc.accountNumber}}" required="required"></input>
+							</div>
+				
+							
+							
+			</div>
+			<div class="col col-md-6">
+					<div class="form-item-container">
+								<label class="form-item-Label">Bank Name</label>
+								<input class="form-item-input"  type="text" name="bankName" value="{{salaryAc.bankName}}" required="required"></input>
+							</div>
+						<div class="form-item-container">
+								<label class="form-item-Label">Ifsc Code</label>
+								<input class="form-item-input"  type="text" name="ifscCode" value="{{salaryAc.ifscCode}}" required="required"></input>
+							</div>	
+							
+
+							
+			</div>
+		</div>
+		<div class="row">
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Save</button>
+						</div>
+					</div>
+
+		</form>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		
+			$('.go-back').click(function(){
+				
+				window.location=location.origin + "/auth/all-salary-accounts";
+			});
+		
+
+	});
+
+</script>
+{% endblock %}

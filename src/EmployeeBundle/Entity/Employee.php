@@ -5,6 +5,7 @@ namespace EmployeeBundle\Entity;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 use Doctrine\ORM\Mapping as ORM;
+use EmployeeBundle\Entity\Designation;
 
 /**
  * Employee
@@ -101,12 +102,20 @@ class Employee implements UserInterface
     private $managerNid;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="designation", type="string", length=255,nullable=true)
+     * @ORM\ManyToOne(targetEntity="Designation", inversedBy="employee")
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $designation;
 
+     public function getDesignation()
+    {
+        return $this->designation;
+    }
+
+    public function setDesignation(Designation $designation)
+    {
+        $this->designation = $designation;
+    }
      /**
      * @var string
      *
@@ -432,30 +441,7 @@ class Employee implements UserInterface
     {
         return $this->panNumber;
     }
-          /**
-     * Set designation
-     *
-     * @param string $designation
-     *
-     * @return Employee
-     */
-    public function setDesignation($designation)
-    {
-        $this->designation = $designation;
-
-        return $this;
-    }
-
-    /**
-     * Get designation
-     *
-     * @return string
-     */
-    public function getDesignation()
-    {
-        return $this->designation;
-    }
-    
+        
 
               /**
      * Set employeeStatus

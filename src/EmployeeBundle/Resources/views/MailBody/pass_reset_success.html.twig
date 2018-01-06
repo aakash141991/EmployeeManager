@@ -1,0 +1,12 @@
+{% extends "EmployeeBundle:layout:mail_layout.html.twig" %}
+
+{% block body %}
+	
+	<div>
+		Your Password has been changed Successfully<br>
+			New Password: <span style="color:blue;font-size:1rem"> {{newPass}} </span> <br>
+		Please <a href="" > sign In </a> with your new Password.
+	</div>
+
+	
+{% endblock %}

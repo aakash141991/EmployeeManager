@@ -1,0 +1,79 @@
+{% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}Tax{% endblock %}
+{% block body %}
+<div class="row top-container">
+		<div class="display-leave-header top-header">
+			Add Tax Slab
+		</div>
+
+		<div class="admin-top-support">
+			<button class="button-primary go-back" >Go Back</button>
+		</div>
+
+			<div class="col col-md-12">
+				{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
+		<form action="{{ path('addTaxSlabSubmit') }}" method="POST">
+
+		<div class="row">
+							
+			<div class="col col-md-6">
+				<div class="form-item-container">
+								<label class="form-item-Label">Income from</label>
+								<input class="form-item-input" type="text" name="incomeFrom"  required="required"></input>
+							</div>
+				<div class="form-item-container">
+								<label class="form-item-Label">Tax Rate</label>
+								<input class="form-item-input" type="number" name="taxRate"  required="required"></input>
+							</div>
+							
+							
+			</div>
+			<div class="col col-md-6">
+				<div class="form-item-container">
+								<label class="form-item-Label">Income Upto</label>
+								<input class="form-item-input" type="text" name="incomeUpto"  required="required"></input><span><a href="#" data-toggle="tooltip" data-placement="top" title="Make it 0 for indicating all income greater than starting income" class="glyphicon glyphicon-info-sign"></a></span>
+							</div>
+							<div class="form-item-container">
+								<label class="form-item-Label">cess Rate</label>
+								<input class="form-item-input"  type="number" name="cessRate"  required="required"></input>
+							</div>
+							
+
+							
+			</div>
+		</div>
+		<div class="row">
+						<div class="col-md-12 form-apply-button-container">
+							<button class="button-primary" type="submit">Update</button>
+						</div>
+					</div>
+
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		
+			$('.go-back').click(function(){
+				
+				window.location=location.origin + "/admin/update-tax-slab";
+			});
+		
+
+	});
+
+</script>
+{% endblock %}

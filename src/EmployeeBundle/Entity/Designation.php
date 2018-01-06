@@ -3,6 +3,8 @@
 namespace EmployeeBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 /**
  * Designation
@@ -27,6 +29,25 @@ class Designation
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+
+     /**
+     * @ORM\OneToMany(targetEntity="Employee", mappedBy="designation")
+     */
+    private $employee;
+
+      public function __construct()
+    {
+        $this->employee = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection|Employee[]
+     */
+    public function getEmployee()
+    {
+        return $this->employee;
+    }
+
 
 
     /**

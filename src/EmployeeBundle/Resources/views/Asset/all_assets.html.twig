@@ -1,6 +1,6 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
 
-
+{% block title %}Asset{% endblock %}
 {% block body %}
 <div class="row top-container">
 	<div class=" top-header">
@@ -17,7 +17,7 @@
 				<th>sr. no</th>
 				<th>Employee Id</th>
 				<th>Asset Type</th>
-				<th>Asset ID</th>
+				
 				<th>Assigned Date</th>
 			</tr>
 			</thead>
@@ -28,8 +28,8 @@
        			 <tr>
        			 	<td>{{ count }}</td>
        			 	<td>{{ asset.employeeId }}</td>
-       			 	<td>{{ asset.assetType }} <span data="{{ asset.assetTypeId}}" class="glyphicon glyphicon-fullscreen more-details-asset"></span></td>
-       			 	<td>{{ asset.assetId }}</td>
+       			 	<td>{{ asset.assetType.typeName }} <span data="{{ asset.assetType.id}}" class="glyphicon glyphicon-fullscreen more-details-asset"></span></td>
+       			 	
        			 	<td>{{ asset.fromDate }}</td>
        			 </tr>
    			 {% endfor %}

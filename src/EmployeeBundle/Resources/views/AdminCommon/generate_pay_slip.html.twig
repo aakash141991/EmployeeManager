@@ -1,13 +1,30 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}PaySlip{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
 			Generate Pay Slip
 		</div>
-		<div class="col col-md-12 top-search-bar-container">
-			<div class="suggest-employee-container">
+
+		<div class="col col-md-12 ">
+			<div class="admin-top-support">
+				{% if employee %}
+				<ul >
+					<li class="top-support-buttons"><button class="button-primary go-back">Go Back</button></li>
+					<li class="top-support-buttons"><button class="button-primary show-previous" data-id="{{employee.nID}}">previous month</button></li>
+					<li class="top-support-buttons"><button class="button-primary show-current" data-id="{{employee.nID}}">current month</button></li>
+					<li class="top-support-buttons"><button class="button-primary show-all" data-id="{{employee.nID}}">Show all</button></li>
+
+				</ul>		
+				
+			
+		{% else %}
+			<div class="top-search-bar-container">
+					
 				<span class="search-employee-label">Search Employee:</span><span ><input id="admin_employee_search" class="search-employee-input" type="text" name="employee_id"></span><span class="glyphicon glyphicon-search admin-search-button"></span>
 			<div id="suggest"></div>
+			</div>
+				{% endif %}
 			</div>
 			{% if message %}
 				<div class="message-wrapper col col-md-8 ">
@@ -22,9 +39,10 @@
 		</div>
 		
 		
+		
 		</div>
 		{% if employee %}
-			<div class="row">
+			<div class="row ">
 						<div class="col-md-12 employee-details-container">
 								<table class="display-data-table" id="">
 								<thead>
@@ -40,14 +58,18 @@
 					       			 	<td>{{ employee.name }}</td>
 					       			 	<td>{{ employee.email }}</td>
 					       			 	<td>{{ employee.phone}}</td>
-					       			 	<td>{{ employee.designation}}</td>
+					       			 	{% if employee.designation %}
+						<td>{{ employee.designation.name}}</td>
+					{% else %}
+						<td>Not set</td>
+				{% endif %}	
 					       			 </tr>
 							
 								</tbody>
 							</table>
 						</div>
 				{% if payment %}
-				<div class="col col-md-4 last-row-col">
+				<div class="col col-md-4">
 						<div class="display-payment-heading">
 							Payment Details
 						</div>
@@ -58,8 +80,8 @@
 							<tr><td>HRA</td><td>{{payment.hra}}</td></tr>
 							<tr><td>Special Allowance</td><td>{{payment.specialAllowance}}</td></tr>
 							<tr><td>Conveyance Allowance</td><td>{{payment.conveyanceAllowance}}</td></tr>
-							<tr><td>PF Contribution</td><td>{{payment.pfContribution}}</td></tr>
-							<tr><td>Income Tax Deduction</td><td>{{payment.incomeTax}}</td></tr>
+							<tr class="highlighted-salary"><td >Total Earnings</td><td>{{payment.totalEarning}}</td></tr>
+							
 								
 							</tbody>
 						</table>
@@ -74,7 +96,7 @@
 				</div>
 			{% endif %}
 			{% if attendance %}
-				<div class="col col-md-4  last-row-col">
+				<div class="col col-md-4 ">
 					<div class="display-payment-heading">
 							Attendance
 						</div>
@@ -84,17 +106,15 @@
 							<tr><td>Total days</td><td>{{attendance.getTotalDays}}</td></tr>
 							<tr><td>Absent days</td><td>{{attendance.getAbsentDays}}</td></tr>
 							<tr><td>Present days</td><td>{{attendance.getPresentDays}}</td></tr>
-							
+							<tr  class="highlighted-salary"><td>Salary Deducted</td><td >{{attendance.salaryDeducted}}</td></tr>
 								
 							</tbody>
 						</table>
-						<div class="change-attendance-container">
-							<button class="button-primary change-attendance-button" data-id="{{employee.nID}}">Change </button>
-						</div>
+						
 						
 				</div>
 				{% else %}
-					<div class="col col-md-4  last-row-col">
+					<div class="col col-md-4 ">
 					<div class="display-payment-heading">
 							Attendance
 						</div>
@@ -102,18 +122,98 @@
 					</div>
 
 				{% endif %}
-				<div class="col col-md-4  last-row-col">
-					<div class="Action-button-container">
-						<button class="button-primary update-payment-button" data-id="{{employee.nID}}">Update Payment </button>
-					<button class="button-primary generate-pay-slip" data-id="{{employee.nID}}">Generate PaySlip</button>
+					{% if payment %}
+				<div class="col col-md-4  ">
+					<div class="display-payment-heading">
+							Deductions Calculated
+						</div>
+						<table class="display-data-table " >
+							<tbody><tr>
+								<td>Pf Contribution</td><td>{{payment.pfContribution}}</td>
+							</tr>
+							<tr><td>Income tax</td><td>{{payment.incomeTax}}</td></tr>
+
+							<tr><td>Total Deduction</td><td>{{payment.totalDeduction}}</td></tr>
+							
+							{% if attendance %}
+								<tr  class="highlighted-salary"><td>Net Salary</td><td >{{payment.netSalary - attendance.salaryDeducted }}</td></tr>
+							{% else %}	
+							<tr  class="highlighted-salary"><td>Net Salary</td><td >{{payment.netSalary}}</td></tr>
+						{% endif %}
+							</tbody>
+							
+						</table>
+						
+
+				</div>
+					{% else %}
+					<div class="col col-md-4 ">
+					<div class="display-payment-heading">
+							Deductions Calculated
+						</div>
+						<div class="no-data-text">Data Not Availaible</div>
 					</div>
+				{% endif %}
 					
+					
+				</div>
+				<div class="row">
+
+					<div class="col col-md-4 last-row-col">
+						<div class="update-buttons-container"><button class="button-primary update-payment-button" data-id="{{employee.nID}}">Update Payment </button></div>
+						
+					</div>
+					<div class="col col-md-4 last-row-col">
+						<div class="update-buttons-container">
+							<button class="button-primary change-attendance-button" data-id="{{employee.nID}}">Change </button>
+						</div>
+					</div>
+					<div class="col col-md-4 last-row-col">
+						<div class="update-buttons-container">
+							<button class="button-primary generate-pay-slip" data-id="{{employee.nID}}">Generate PaySlip</button>
+						</div>
+						
+					</div>
 				</div>
 				
 			</div>
 			
 		
-	{% endif %}
+			{% elseif allEmployees %}
+			<div class="col-md-12 all-employee-details last-row-col">
+								<table class="display-data-table" id="displayTableSecond">
+								<thead>
+									<tr>
+										<th>Sr. No.</th>
+									<th>Employee Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Designation</th>
+									<th>Action</th>
+								</tr>
+								</thead>
+								<tbody>
+									{% set count = 0 %}
+									{% for Employee in allEmployees %}
+										{% set count = count + 1 %}
+					       			 <tr>
+					       			 	<td>{{count}}</td>
+					       			 	<td>{{ Employee.name }}</td>
+					       			 	<td>{{ Employee.email }}</td>
+					       			 	<td>{{ Employee.phone}}</td>
+					       			 	{% if Employee.designation %}
+						<td>{{ Employee.designation.name}}</td>
+					{% else %}
+						<td>Not set</td>
+				{% endif %}	
+					       			 	<td><button class="button-form-type show-payment"  data-id="{{Employee.nID}}">show Payment</button> </td>
+					       			 </tr>
+					       			 {% endfor %}
+							
+								</tbody>
+							</table>
+						</div>
+{% endif %}
 
 
 {% endblock %}
@@ -123,7 +223,9 @@
 
   	.employee-details-container{
   	}
-
+  	.all-employee-details{
+  		margin-top:20px;
+  	}
   	.display-payment-heading{
   		margin-top:20px;
   		height: 30px;
@@ -135,6 +237,11 @@
             width:90%;
 
 
+  	}
+  	.highlighted-salary{
+  		color:green;
+  		font-weight: 600;
+  		background-color: #f3e5dd;
   	}
 	.no-data-text{
 		color:#de5a5a;
@@ -150,6 +257,13 @@
 	.change-attendance-container{
 		text-align: center;
 	}
+	.update-buttons-container{
+		text-align: center;
+	}
+	.go-back {
+  		margin-right: 10%;
+  	}
+
 
   	</style>
   {% endblock %}
@@ -170,6 +284,41 @@
 				var employeeId = $(this).attr('data-id');
 				   	window.location=location.origin + "/admin/update-payment/"+employeeId;
 			       });
+			$('.change-attendance-button').click(function(){
+				var employeeId = $(this).attr('data-id');
+				   	window.location=location.origin + "/admin/manage-attendance/"+employeeId;
+			       });
+			$('.show-payment').click(function(){
+				var employeeId = $(this).attr('data-id');
+				   	window.location=location.origin + "/admin/getEmployeeDetails/"+employeeId;
+			       });
+			$('.go-back').click(function(){
+				window.location = location.origin + "/admin/generate-payslip";
+			});
+			$('.show-previous').click(function(){
+				var employeeId = $(this).attr('data-id');
+				window.location = location.origin + "/admin/getEmployeeDetails/"+employeeId +"?previous=previous";
+			});
+			$('.show-current').click(function(){
+				var employeeId = $(this).attr('data-id');
+				window.location = location.origin + "/admin/getEmployeeDetails/"+employeeId;
+			});
+			
+			$('.show-all').click(function(){
+				var employeeId = $(this).attr('data-id');
+				window.location = location.origin + "/admin/full-pay-details/"+employeeId;
+			});
+			
+			if(location.search == '?previous=previous'){
+				$('.show-current').css('display','block');
+				$('.show-previous').css('display','none');
+			}else{
+				$('.show-current').css('display','none');
+				$('.show-previous').css('display','block');
+			}
+			
+			
+			
 			
 			
 			

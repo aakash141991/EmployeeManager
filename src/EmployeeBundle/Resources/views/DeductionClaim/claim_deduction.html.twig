@@ -1,0 +1,75 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Deduction{% endblock %}
+{% block body %}
+	<div class="row top-container">
+
+		<div class="top-header ">Claim Income Tax Deduction</div>
+	</div>
+	<div class="admin-top-support">
+			<button class="button-primary claim-new" data-id="{{app.user.nID}}">Add New Claim</button>
+		</div>
+		<div class="col col-md-12 table-container">
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Amount</th>
+				<th>Description</th>
+				<th>Status</th>
+				
+				<th>Financial Year</th>
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for deduction in deductions %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ deduction.deduction }}</td>
+       			 	<td>{{ deduction.description }}</td>
+       			 	{% if deduction.isApproved == 1 %}
+       			 		<td class="approved">approved </td>
+       			 	{% else %}
+       			 		<td class="pending">pending</td>
+       			 	{% endif %}
+       			 	
+       			 	<td>{{ deduction.year }} - {{ deduction.year + 1}}</td>
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+			<div id="nav"></div>
+	</div>
+{% endblock %}
+
+{% block stylesheets %}
+	<style type="text/css">
+	.approved{
+		color: green;
+	}
+	.pending{
+				color: red;
+	}
+
+		</style>
+{% endblock %}
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+
+        
+        $('.claim-new').click(function(){
+        	var empId = $(this).attr('data-id');
+        	window.location = location.origin + "/auth/new-deduction-claim/"+empId;
+        });
+
+
+
+});
+</script>
+{% endblock %}

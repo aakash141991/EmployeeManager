@@ -1,5 +1,5 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
-
+{% block title %}Attendance{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
@@ -7,7 +7,14 @@
 		</div>
 		<div class="col col-md-12 top-search-bar-container">
 			<div class="suggest-employee-container">
-				<span class="search-employee-label">Search Employee:</span><span ><input id="admin_employee_search"  class="search-employee-input" type="text" name="employee_id"></span><span class="glyphicon glyphicon-search search-employee-search-button"></span>
+				{% if employee %}
+					{% if showPrevious == 'true' %}
+					<span><button class="button-primary goto-current current-attendance-button" data-id="{{employee.nID}}">Go Back</button></span>
+					{% else %}
+					<span><button class="button-primary go-back">Go Back</button></span>
+					{% endif %}
+				{% endif %}
+				<span class="search-employee-label">Search Employee:</span><span ><input id="employee_search" class="search-employee-input" type="text" name="employee_id"></span><span class="glyphicon glyphicon-search search-employee-search-button"></span>
 			<div id="suggest"></div>
 			</div>
 			
@@ -16,7 +23,7 @@
 		{% if employee %}
 			<div class="row">
 						<div class="col-md-12 employee-details-container">
-								<table class="display-data-table" id="displayTable">
+								<table class="display-data-table" id="">
 								<thead>
 									<tr>
 									<th>Employee Name</th>
@@ -30,7 +37,12 @@
 					       			 	<td>{{ employee.name }}</td>
 					       			 	<td>{{ employee.email }}</td>
 					       			 	<td>{{ employee.phone}}</td>
-					       			 	<td>{{ employee.designation}}</td>
+
+					       			 	{% if employee.designation %}
+							<td>{{ employee.designation.name}}</td>
+								{% else %}
+									<td>Not set</td>
+							{% endif %}	
 					       			 </tr>
 							
 								</tbody>
@@ -54,7 +66,7 @@
 							</tbody>
 						</table>
 						<div class="change-attendance-container">
-							<button class="button-primary change-attendance-button" data-id="{{employee.nID}}">Update </button>
+							<button class="button-primary update-attendance-button" data-id="{{employee.nID}}" att-data-id="{{attendance.id}}" >Update </button>
 						</div>
 						
 				</div>
@@ -65,7 +77,7 @@
 						</div>
 						<div class="no-data-text">Data Not Availaible Please Update.</div>
 						<div class="change-attendance-container">
-							<button class="button-primary change-attendance-button" data-id="{{employee.nID}}">Update </button>
+							<button class="button-primary nodata-attendance-button" data-id="{{employee.nID}}">Update </button>
 						</div>
 					</div>
 
@@ -94,16 +106,60 @@
 					</div>
 
 					{% endif %}
+
+					<div class="col col-md-4  last-row-col">
+						<div class="display-attendance-heading">
+							See all records
+						</div>
+						<div class="no-data-text"></div>
+						<div class="change-attendance-container">
+							<button class="button-primary all-attendance-button" data-id="{{employee.nID}}">See All </button>
+						</div>
+					</div>
 				
 			</div>
 
 			
 		
-	{% endif %}
+	{% elseif allEmployees %}
+			<div class="col-md-12 all-employee-details">
+								<table class="display-data-table" id="displayTableSecond">
+								<thead>
+									<tr>
+										<th>Sr. No.</th>
+									<th>Employee Name</th>
+									<th>Email</th>
+									<th>Phone</th>
+									<th>Designation</th>
+									<th>Action</th>
+								</tr>
+								</thead>
+								<tbody>
+									{% set count = 0 %}
+									{% for Employee in allEmployees %}
+										{% set count = count + 1 %}
+					       			 <tr>
+					       			 	<td>{{count}}</td>
+					       			 	<td>{{ Employee.name }}</td>
+					       			 	<td>{{ Employee.email }}</td>
+					       			 	<td>{{ Employee.phone}}</td>
+					       			 	{% if Employee.designation %}
+											<td>{{ Employee.designation.name}}</td>
+												{% else %}
+													<td>Not set</td>
+											{% endif %}	
+					       			 	<td><button class="button-form-type show-attendance"  data-id="{{Employee.nID}}">show Attendance</button> </td>
+					       			 </tr>
+					       			 {% endfor %}
+							
+								</tbody>
+							</table>
+						</div>
+{% endif %}
+
 
 </div>
 {% endblock %}
-
 {% block javascripts %}
 
 
@@ -119,8 +175,32 @@
 			       });
 			$('.current-attendance-button').click(function(){
 				var employeeId = $(this).attr('data-id');
+				
 				   	window.location=location.origin + "/admin/manage-attendance/"+employeeId+"?showprevious=false";
 			       });
+			$('.update-attendance-button').click(function(){
+				var employeeId = $(this).attr('data-id');
+				var attId =  $(this).attr('att-data-id');
+				   	window.location=location.origin + "/admin/update-attendance?employeeId="+employeeId+"&&showprevious=false&&attdId="+attId;
+			       });
+			$('.nodata-attendance-button').click(function(){
+				var employeeId = $(this).attr('data-id');
+				
+				   	window.location=location.origin + "/admin/update-attendance?employeeId="+employeeId+"&&showprevious=false";
+			       });
+			
+			$('.show-attendance').click(function(){
+				var employeeId = $(this).attr('data-id');
+				   	window.location=location.origin + "/admin/manage-attendance/"+employeeId+"?showprevious=false";
+			       });
+			$('.go-back').click(function(){
+				window.location = location.origin + "/admin/manage-attendance";
+			});
+			$('.all-attendance-button').click(function(){
+				var employeeId = $(this).attr('data-id');
+				window.location = location.origin + "/admin/all-attendance/"+employeeId;
+			});
+			
 	
 			
 			
@@ -131,6 +211,12 @@
 {% endblock %}
 {% block stylesheets %}
   	<style type="text/css">
+  	.all-employee-details{
+  		margin-top: 20px;
+  	}
+  	.go-back , .goto-current{
+  		margin-right: 10%;
+  	}
 .display-attendance-heading{
 	margin-top:20px;
   		height: 30px;

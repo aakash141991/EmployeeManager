@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}Asset{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
@@ -23,7 +24,7 @@
        			 	<td>{{ count }}</td>
        			 	<td>{{ assetRequest.employeeName }}</td>
        			 	<td>{{ assetRequest.employeeId }}</td>
-       			 	<td>{{ assetRequest.assetType }}</span></td>
+       			 	<td>{{ assetRequest.assetType.typeName }}</span></td>
        			 	
        			 	<td><button class="button-form-type accept-asset" data-toggle="modal" data-target="#acceptModal"  data-id="{{assetRequest.id}}">Accept</button> <button data-toggle="modal" data-target="#rejectModal"  data-id="{{assetRequest.id}}" class="button-form-type-danger reject-asset">Reject</button></td>
 
@@ -48,7 +49,7 @@
 			        <p>This Asset will be approved.</p>
 			      </div>
 			      <div class="modal-footer">
-			      	<button type="button" class="btn button-primary accept-asset-confirm" data-dismiss="modal">Accept</button>
+			      	<button type="button" class="btn button-primary accept-asset-confirm form-submit" data-dismiss="modal">Accept</button>
 			        <button type="button" class="btn button-primary-danger" data-dismiss="modal">close</button>
 			      </div>
 			    </div>
@@ -70,7 +71,7 @@
 			        <p>This Asset Request will be rejected.</p>
 			      </div>
 			      <div class="modal-footer">
-			      	<button type="button" class="btn button-primary reject-asset-confirm" data-dismiss="modal">Reject</button>
+			      	<button type="button" class="btn button-primary reject-asset-confirm form-submit" data-dismiss="modal">Reject</button>
 			        <button type="button" class="btn button-primary-danger " data-dismiss="modal">close</button>
 			      </div>
 			    </div>

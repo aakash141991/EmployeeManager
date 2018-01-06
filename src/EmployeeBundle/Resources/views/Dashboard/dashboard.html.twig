@@ -1,5 +1,5 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
-
+{% block title %}Dashboard{% endblock %}
 {% block stylesheets %}
 	 <link rel="stylesheet" type="text/css" href="{{ asset('css/dashboard.css') }}">
 	
@@ -43,7 +43,11 @@
 		<div class="row dashboard-side-block-announcement  ">
 			<div class="side-block-content">
 				<div class="side-block-heading">Announcements</div>
-				<div class="side-block-text">lorem ipsum lorem kapeas lorea.</div>
+				{% for announce in announcements %}
+					<div class="side-block-heading">* {{announce.title}}</div>
+				<div class="side-block-text">{{announce.description}}</div>
+				{% endfor %}
+				
 			</div>
 			
 		</div>

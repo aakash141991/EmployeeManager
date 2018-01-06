@@ -12,15 +12,22 @@
   </div>
   <div class="col col-md-6 header-link-container">
      <ul>
+      <li class="display-name ">
+        Welcome {{ app.user.name}}
+      </li>
      	<li class="top-header-link dashboard">
      		<a href="#" class="top-header-link-a">Dashboard<br></a>
      	</li>
+      <li class="top-header-link see-Account">
+        <a href="#" class="top-header-link-a ">Account </a>
+        
+      </li>
      
       <li class="top-header-link logout">
         <a href="#" class="top-header-link-a">Logout </a>
         
       </li>
-     	<li class="top-header-link-menu open-mobile-menu-link">
+     	<li class=" open-mobile-menu-link">
      		<span class="top-header-link-a open-mobile-menu glyphicon glyphicon-menu-hamburger"></span>
      	</li>
      </ul>
@@ -35,5 +42,9 @@ $(document).ready(function () {
     $(".dashboard").click(function(){
         window.location= location.origin + "/admin/dashboard";
     });
+    $(".see-Account").click(function(){
+        window.location= location.origin + "/admin/my-account";
+    });
+     
 });
 </script>

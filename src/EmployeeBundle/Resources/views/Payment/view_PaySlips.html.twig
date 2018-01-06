@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Payment{% endblock %}
 {% block body %}
 	<div class="row top-container">
 
@@ -104,8 +105,11 @@
 
 		        		if(result.allowed == 'true'){
 		        			var link = document.createElement("a");
-						    link.download = "payslip";
-						    link.href = result.filepath;
+						    
+						    var filePath = result.filepath;
+						   var assetpath= filePath.substring(filePath.indexOf("payslips"));
+
+						   link.href = "/"+assetpath;
 						    link.click();
 		        		}
 		        		

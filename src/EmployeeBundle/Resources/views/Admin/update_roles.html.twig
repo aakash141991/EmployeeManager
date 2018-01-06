@@ -1,5 +1,5 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
-
+{% block title %}Role{% endblock %}
 {% block body %}
 <div class="row top-container">
 	<div class=" top-header">
@@ -9,6 +9,15 @@
 			<button class="button-primary add-role">Add New</button>
 		</div>
 		<div class="col col-md-12 table-container">
+			{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
 			<table class="display-assets-table" id="displayTable">
 			<thead>
 				<tr>
@@ -26,7 +35,7 @@
        			 	<td>{{ count }}</td>
        			 	<td>{{ role.roleName }}</td>
        			 	<td>{{ role.roleActionName }} </td>
-       			 	<td><button class="button-form-type change-department"  data-id="{{role.id}}">update</button> <button data-toggle="modal" data-target="#delete"   data-id="{{role.id}}" class="button-form-type-danger delete-department">Delete</button></td>
+       			 	<td><button class="button-form-type update-this-role"  data-id="{{role.id}}">update</button> <button data-toggle="modal" data-target="#delete"   data-id="{{role.id}}" class="button-form-type-danger delete-role">Delete</button></td>
        			 	
        			 </tr>
    			 {% endfor %}
@@ -42,13 +51,13 @@
 			    <div class="modal-content">
 			      <div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal">&times;</button>
-			        <h4 class="modal-title">Delete Department</h4>
+			        <h4 class="modal-title">Delete Role</h4>
 			      </div>
 			      <div class="modal-body">
-			        <p>This Department will be Deleted.</p>
+			        <p>This Role will be Deleted.</p>
 			      </div>
 			      <div class="modal-footer">
-			      	<button type="button" class="btn button-primary delete-department-confirm" data-dismiss="modal">Delete</button>
+			      	<button type="button" class="btn button-primary delete-role-confirm" data-dismiss="modal">Delete</button>
 			        <button type="button" class="btn button-primary-danger " data-dismiss="modal">close</button>
 			      </div>
 			    </div>
@@ -63,10 +72,21 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
+		var roleId="";
 		$('.add-role').click(function(){
 				window.location = location.origin + "/admin/add-new-role"
 			});
 		
+		$('.update-this-role').click(function(){
+			roleId = $(this).attr("data-id");
+				window.location = location.origin + "/admin/update-roles/"+roleId
+			});
+		$('.delete-role').click(function(){
+				 roleId = $(this).attr("data-id");
+			});
+		$('.delete-role-confirm').click(function(){
+				window.location = location.origin + "/admin/delete-role/"+roleId;
+			});
 	});
 	</script>
 {% endblock %}

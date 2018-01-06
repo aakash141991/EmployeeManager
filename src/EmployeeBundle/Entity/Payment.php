@@ -38,42 +38,63 @@ class Payment
     /**
      * @var float
      *
-     * @ORM\Column(name="hra", type="float")
+     * @ORM\Column(name="hra", type="float",nullable=true)
      */
     private $hra;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="specialAllowance", type="float")
+     * @ORM\Column(name="specialAllowance", type="float",nullable=true)
      */
     private $specialAllowance;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="conveyanceAllowance", type="float")
+     * @ORM\Column(name="conveyanceAllowance", type="float",nullable=true)
      */
     private $conveyanceAllowance;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="pfContribution", type="float")
+     * @ORM\Column(name="pfContribution", type="float",nullable=true)
      */
     private $pfContribution;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="incomeTax", type="float")
+     * @ORM\Column(name="incomeTax", type="float",nullable=true)
      */
     private $incomeTax;
 
      /**
+     * @var float
+     *
+     * @ORM\Column(name="totalEarning", type="float",nullable=true)
+     */
+    private $totalEarning;
+      /**
+     * @var float
+     *
+     * @ORM\Column(name="totalDeduction", type="float",nullable=true)
+     */
+    private $totalDeduction;
+
+
+       /**
+     * @var float
+     *
+     * @ORM\Column(name="netSalary", type="float")
+     */
+    private $netSalary;
+
+     /**
      * @var string
      *
-     * @ORM\Column(name="updatedBy", type="string", length=255)
+     * @ORM\Column(name="updatedBy", type="string", length=255,nullable=true)
      */
     private $updatedBy;
 
@@ -281,5 +302,84 @@ class Payment
     {
         return $this->updatedBy;
     }
+    
+
+
+    /**
+     * Set totalEarning
+     *
+     * @param float $totalEarning
+     *
+     * @return Payment
+     */
+    public function setTotalEarning($totalEarning)
+    {
+        $this->totalEarning = $totalEarning;
+
+        return $this;
+    }
+
+    /**
+     * Get totalEarning
+     *
+     * @return float
+     */
+    public function getTotalEarning()
+    {
+        return $this->totalEarning;
+    }
+
+
+
+    /**
+     * Set totalDeduction
+     *
+     * @param float $totalDeduction
+     *
+     * @return Payment
+     */
+    public function setTotalDeduction($totalDeduction)
+    {
+        $this->totalDeduction = $totalDeduction;
+
+        return $this;
+    }
+
+    /**
+     * Get totalDeduction
+     *
+     * @return float
+     */
+    public function getTotalDeduction()
+    {
+        return $this->totalDeduction;
+    }
+
+ 
+    /**
+     * Set netSalary
+     *
+     * @param float $netSalary
+     *
+     * @return Payment
+     */
+    public function setNetSalary($netSalary)
+    {
+        $this->netSalary = $netSalary;
+
+        return $this;
+    }
+
+    /**
+     * Get netSalary
+     *
+     * @return float
+     */
+    public function getNetSalary()
+    {
+        return $this->netSalary;
+    }
+
+
 }
 

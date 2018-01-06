@@ -11,6 +11,9 @@ use EmployeeBundle\Entity\LeaveFaq;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Date;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use \DateTime;
+use \DatePeriod;
+use \DateInterval;
 class LeaveController extends Controller
 {
     /**
@@ -18,7 +21,12 @@ class LeaveController extends Controller
      */
     public function leaveHistoryAction()
     {
-    	$leaves = $this->getDoctrine()->getRepository(EmployeeLeave::class)->findAll();
+
+      $user = $this->getUser();
+      $empId= $user->getNID();
+    	$leaves = $this->getDoctrine()->getRepository(EmployeeLeave::class)->findBy(
+        array('employeeId' => $empId,
+          ));
     	
         return $this->render('EmployeeBundle:Leave:leave_history.html.twig', array(
             'leaves'=> $leaves,
@@ -42,10 +50,15 @@ class LeaveController extends Controller
             $leaveTotal=$leaveRecord ;
         foreach ($leaves as $leave) {
 
-               $takenLeaveType =  $leave->getLeaveType();
-               $takenDays= $leave->getNumberOfDays();
+               $takenLeaveType =  $leave->getleaveTypes();
+               if(('approved'==$leave->getLeaveStatus())||('pending'==$leave->getLeaveStatus())){
+                $takenDays= $leave->getNumberOfDays();
+              }else{
+                $takenDays= 0;
+              }
+               
                foreach ($leaveRecord as $key => $value) {
-                 if($key == $takenLeaveType ){
+                 if($key == $takenLeaveType->getTypeName() ){
                    $value = $value - $takenDays;
                    $leaveRecord[$key]=$value;
                    break;
@@ -84,13 +97,20 @@ class LeaveController extends Controller
             $employeeName = $user->getName();
             $leave->setEmployeeId($employeeId);
             $leave->setEmployeeName($employeeName);
-
-            $leaveType=$request->request->get('leave_type');
-            $leave->setLeaveType($leaveType);
-            $leave->setLeaveStatus('pending');
-
+            $days_remaining = 0;
+            $weekends=0;
+             $isvalid = true;
+              $message="";
+              $errorMessage= "";
+            $leaveTypeId=$request->request->get('leave_type');
             $fromDate=$request->request->get('from_date');
             $toDate=$request->request->get('to_date');
+
+
+            if(isset( $leaveTypeId) && isset($fromDate) && isset($toDate)){
+              $leaveType= $this->getDoctrine()->getRepository(LeaveTypes::class)->find($leaveTypeId);
+            $leave->setleaveTypes($leaveType);
+            $leave->setLeaveStatus('pending');
             
             $start = strtotime($fromDate);
             $end = strtotime($toDate);
@@ -98,22 +118,141 @@ class LeaveController extends Controller
 
             $leave->setFromDate($fromDate);
             $leave->setToDate($toDate);
-            $leave->setNumberOfDays($days_taken);
+            
+            $days_taken =$days_taken +1;
+            $leaveFromDate =new DateTime($fromDate);
+             $leaveTillDate =new DateTime($toDate);
+             $formatted_leave_from =  date_format($leaveFromDate,"Y/m/d ");
+            $formatted_leave_till = date_format($leaveTillDate,"Y/m/d");
+        
 
+          $interval =  DateInterval::createFromDateString('1 day');
+          $period = new DatePeriod($leaveFromDate, $interval, $leaveTillDate);
+
+          foreach ( $period as $dt ){
+            $dtString =   $dt->format( "Y-m-d" );
+            $weekDay = date('N', strtotime($dtString));
              
-              if($days_taken <=0){
-                 $message="";
+               if( $weekDay == 6 || $weekDay == 7){
+                $weekends ++  ;
+               }
+          }
+      
+          $days_taken =$days_taken - $weekends;
+          $leave->setNumberOfDays($days_taken);
+                      
+
+               $leaves = $this->getDoctrine()->getRepository(EmployeeLeave::class)->findBy(
+                array('employeeId' => $user->getNID(), )
+              );
+               $leaveTypes = $this->getDoctrine()->getRepository(LeaveTypes::class)->findAll();
+             $leaveRecord = array("key" => "value");
+              foreach ($leaveTypes as  $leavetype) {
+                     $leaveRecord[$leavetype->getTypeName()] = $leavetype->getDaysAlloted();
+                  }
+                  $leaveTotal=$leaveRecord ;
+              foreach ($leaves as $leaveSingle) {
+
+                     $takenLeaveType =  $leaveSingle->getleaveTypes();
+                     if(('approved'==$leaveSingle->getLeaveStatus())||('pending'==$leaveSingle->getLeaveStatus())){
+
+                        $leaveSingleFrom = new DateTime($leaveSingle->getFromDate());
+                        $leaveSingleTill = new DateTime($leaveSingle->getToDate());
+                        $dateAppliedFrom =date_format($leaveSingleFrom, 'Y-m-d');
+                        $dateAppliedTill=date_format( $leaveSingleTill, 'Y-m-d');
+
+                      if((strtotime($formatted_leave_from) < strtotime($dateAppliedFrom)) && (strtotime($formatted_leave_till) < strtotime($dateAppliedFrom ))){
+
+                        $takenDays= $leaveSingle->getNumberOfDays();
+
+                      }elseif((strtotime($formatted_leave_from) > strtotime($dateAppliedTill)) ){
+                          $takenDays= $leaveSingle->getNumberOfDays();
+                      }else{
+                        $isvalid = false;
+                          $errorMessage= "Leave has already been applied for selected days, please see History";
+                            break;
+                      }
+                    
+
+                      
+                    }else{
+                      $takenDays= 0;
+                    }
+                     
+                     foreach ($leaveRecord as $key => $value) {
+                       if($key == $takenLeaveType->getTypeName() ){
+                         $value = $value - $takenDays;
+                         $leaveRecord[$key]=$value;
+                         break;
+                       }
+                    }
+                  }
+                foreach ($leaveRecord as $key => $value) {
+                  if($key == $leaveType->getTypeName() ){
+                     $days_remaining = $value;
+                      break;
+                     }
+                    
+                  } 
+            }else{
+                $isvalid = false;
+                $errorMessage= "Please Fill the form correctly";
+            }
+
+     
+
+              if($days_taken > $days_remaining  ){
+                  $isvalid = false;
+                  $errorMessage= "You have only " . $days_remaining . " days of " . $leaveType->getTypeName() . " left";
+              }
+               if($days_taken <=0){
+                
+                 $isvalid = false;
                $errorMessage= "Please select proper dates and apply again";
-              }else{
-                $en = $this->getDoctrine()->getManager();
-                $en->persist($leave);
-                $en->flush();
-                $message="Leave Request has been sent for approval";
-                $errorMessage="";
               }
 
-              
+                if( $isvalid){
+                 
+                    $en = $this->getDoctrine()->getManager();
+                    $en->persist($leave);
+                    $en->flush();
+                     $message="Leave Request has been sent for approval";
+                    $errorMessage="";
 
+                    try{
+                      $manager = $this->getDoctrine()->getRepository(Employee::class)->findOneBy(
+                array('nID' => $user->getManagerNid(), )
+              );
+                      if(isset($manager)){
+                        $name = $manager->getName();
+                        $subject="Respond to Leave request";
+                      $viewPath='EmployeeBundle:MailBody:leave_request.html.twig';
+                      $requester = $user->getName();
+                      //$toEmail =$manager->getEmail();
+                      $toEmail="aakash.kumar@nettantra.net";
+                      $fromEmail="admin@nettantra.net";
+                        
+                      $email = \Swift_Message::newInstance()
+                      ->setSubject($subject)
+                      ->setFrom($fromEmail)
+                      ->setTo($toEmail)
+                      ->setBody(
+                          $this->renderView(
+                              $viewPath,
+                              array('name' => $name,'requester'=> $requester,)
+                          ),'text/html');
+                       $this->get('mailer')->send($email);
+                      }
+                      
+                      
+                     
+
+                    }catch (\Exception $e){
+                      $message="Leave Request has been sent for approval, Mail sending Failed";
+                    
+               }
+                   
+           } 
              }catch (\Exception $e){
                 
                 $message="";

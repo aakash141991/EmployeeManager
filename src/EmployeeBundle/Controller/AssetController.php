@@ -18,9 +18,13 @@ class AssetController extends Controller
      */
     public function allAssetsAction()
     {
+
+      $user = $this->getUser();
+      $empId= $user->getNID();
     	$assets = $this->getDoctrine()->getRepository(EmployeeAsset::class)->findBy(
-                array('isAssigned' => 1, )
-              );;
+                array('isAssigned' => 1, 
+                  'employeeId' => $empId, )
+              );
         return $this->render('EmployeeBundle:Asset:all_assets.html.twig', array(
             'assets'=>$assets,
         ));
@@ -48,7 +52,11 @@ class AssetController extends Controller
     {
           $user = $this->getUser();
           $assetTypes=$this->getDoctrine()->getRepository(AssetTypes::class)->findAll();
-          $assetRequests=$this->getDoctrine()->getRepository(EmployeeAsset::class)->findAll();
+          $assetRequests=$this->getDoctrine()->getRepository(EmployeeAsset::class)->findBy(
+            array(
+            'employeeId'=>$user->getNid(),
+          
+        ));
           $message=$request->query->get('message');
           if(!isset($message)){
               $message="";
@@ -79,16 +87,15 @@ class AssetController extends Controller
           $assetType=$this->getDoctrine()->getRepository(AssetTypes::class)->find($assetTypeId);
           
           $employeeAsset = new EmployeeAsset();
-          $employeeAsset->setAssetTypeId($assetTypeId);
+
           $employeeAsset->setEmployeeId($user->getNID());
           $employeeAsset->setEmployeeName($user->getName());
 
           if(isset($assetType)){
-             $employeeAsset->setAssetType($assetType->getTypeName());
+             $employeeAsset->setAssetType($assetType);
               $employeeAsset->setIsAssigned(0);
                 $employeeAsset->setIsRequested(1);
                 $employeeAsset->setIsRejected(0);
-                $employeeAsset->setAssetId('');
                 $employeeAsset->setFromDate('');
                 $en = $this->getDoctrine()->getManager();
                 $en->persist($employeeAsset);
@@ -102,6 +109,7 @@ class AssetController extends Controller
               }catch (\Exception $e){
                 
                 $message="";
+
                $errorMessage= "something went wrong. Please Apply again !";
               
                }

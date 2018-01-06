@@ -1,5 +1,5 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
-
+{% block title %}Leave{% endblock %}
 {% block body %}
 <div class="row top-container">
 	<div class=" top-header">
@@ -57,7 +57,7 @@
 <script type="text/javascript">
 	$(document).ready(function () {
 		$('.go-back').click(function(){
-				window.location = location.origin + "/admin/update-department"
+				window.location = location.origin + "/admin/update-leaves";
 			});
 		
 	});

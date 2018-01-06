@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
+{% block title %}Leave{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
@@ -26,11 +27,11 @@
        			 	<td>{{ count }}</td>
        			 	<td>{{ leaveRequest.employeeName }}</td>
        			 	<td>{{ leaveRequest.employeeId }}</td>
-       			 	<td>{{ leaveRequest.leaveType }}</span></td>
+       			 	<td>{{ leaveRequest.leaveTypes.typeName }}</span></td>
        			 	<td>{{ leaveRequest.fromDate }}</td>
        			 	<td>{{ leaveRequest.toDate }}</td>
        			 	<td>{{ leaveRequest.numberOfDays }}</td>
-       			 	<td><button class="button-form-type accept-leave" data-toggle="modal" data-target="#acceptModal"  data-id="{{leaveRequest.id}}">Accept</button> <button data-toggle="modal" data-target="#rejectModal"  data-id="{{leaveRequest.id}}" class="button-form-type-danger reject-leave">Reject</button></td>
+       			 	<td><button class="button-form-type accept-leave " data-toggle="modal" data-target="#acceptModal"  data-id="{{leaveRequest.id}}">Accept</button> <button data-toggle="modal" data-target="#rejectModal"  data-id="{{leaveRequest.id}}" class="button-form-type-danger reject-leave">Reject</button></td>
 
        			 </tr>
    			 {% endfor %}
@@ -52,7 +53,7 @@
 			        <p>This Leave will be approved.</p>
 			      </div>
 			      <div class="modal-footer">
-			      	<button type="button" class="btn button-primary accept-leave-confirm" data-dismiss="modal">Accept</button>
+			      	<button type="button" class="btn button-primary accept-leave-confirm form-submit" data-dismiss="modal">Accept</button>
 			        <button type="button" class="btn button-primary-danger" data-dismiss="modal">close</button>
 			      </div>
 			    </div>
@@ -74,7 +75,7 @@
 			        <p>This Leave will be rejected.</p>
 			      </div>
 			      <div class="modal-footer">
-			      	<button type="button" class="btn button-primary reject-leave-confirm" data-dismiss="modal">Reject</button>
+			      	<button type="button" class="btn button-primary reject-leave-confirm form-submit" data-dismiss="modal">Reject</button>
 			        <button type="button" class="btn button-primary-danger " data-dismiss="modal">close</button>
 			      </div>
 			    </div>

@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout_loggedout.html.twig" %}
+{% block title %}Login{% endblock %}
 {% block stylesheets %}
 	 <link rel="stylesheet" type="text/css" href="{{ asset('css/login.css') }}">
 	
@@ -15,7 +16,13 @@
 					</div>
 					{% if error %}
 									<div class="form-heading-container alert-danger">
+											
 											<div class=" "><span class="glyphicon glyphicon-remove message-icon"></span>{{ error.messageKey }}</div>
+									</div>
+								{% elseif message %}
+										<div class="form-heading-container alert-danger">
+											
+											<div class=" "><span class="message-icon glyphicon glyphicon-question-sign"></span>{{ message }}</div>
 									</div>
 								{% else %}
 									<div class="form-heading-container">
@@ -36,7 +43,9 @@
             <span class="glyphicon glyphicon-asterisk input-icon"></span>
 						<input type="password" class="input-field"  placeholder="Password" name="_password">
 					</div>
+					
 					<div class="login-input-container">
+						<div class="forgot-pass-link"><a class="forgot-pass-link-action" href="javascript:void(0)" >Forgot Password</a></div>
 						<input type="submit" value="Login" class="button-primary login-button"  name="_submit">
 					</div>
 					</form>
@@ -75,6 +84,11 @@
             
              
             });
+           $('.forgot-pass-link-action').click(function(){
+           		window.location = location.origin + "/auth/forgot-password";
+           });
+
       });
+
 </script>
  {% endblock %}

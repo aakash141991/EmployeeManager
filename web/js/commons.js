@@ -31,6 +31,10 @@ $(document).ready(function () {
 									 $( "#suggest" ).html("");
 										  
 										});
+
+			               		$("#suggestions").html("");
+			               		$( "#suggestions" ).append("<option value="+obj['nid']+">"+obj['name']+"</option>");
+
 			          		}else{
 			          			$( "#suggest" ).html("");
 			          		}
@@ -72,21 +76,18 @@ $(document).ready(function () {
 			   });
 
 		
-		$(".open-mobile-menu").click(function(){
-
+		$(".form-submit").click(function(){
 		
-			$("#mobile-menu").css('width','150px');
-			$("#mobile-menu").css('height','400px');
-		
+			//$(".page-loading").css('display','block');
 		});
 		
-		$(".mobile-close-menu").click(function(){
-			$("#mobile-menu").css('width','0px');
-			$("#mobile-menu").css('height','0px');
-			
-		});
 		
 
 
 
 });
+
+	$(window).load(function() {
+		// Animate loader off screen
+		$(".page-loading").delay(500).fadeOut("slow");;
+	});

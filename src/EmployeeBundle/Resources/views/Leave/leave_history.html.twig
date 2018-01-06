@@ -1,4 +1,5 @@
 {% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+{% block title %}Leave{% endblock %}
 {% block body %}
 <div class="row top-container">
 		<div class="display-leave-header top-header">
@@ -20,7 +21,7 @@
 				{% set count = count + 1 %}
        			 <tr>
        			 	<td>{{ count }}</td>
-       			 	<td>{{ leave.leaveType }}</td>
+       			 	<td>{{ leave.leaveTypes.typeName }}</td>
        			 	<td>{{ leave.fromDate }}</td>
        			 	<td>{{ leave.toDate }}</td>
        			 	{% if  leave.leaveStatus == 'approved' %}

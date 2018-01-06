@@ -1,0 +1,111 @@
+{% extends "EmployeeBundle:layout:layout_loggedIn.html.twig" %}
+
+{% block title %}Salary Account{% endblock %}
+{% block body %}
+<div class="row top-container">
+	<div class=" top-header">
+			Salary Accounts
+		</div>
+		<div class="col col-md-12 admin-top-support">
+			<button class="button-primary add-new-account">Add New</button>
+		</div>
+		
+				</div>
+	<div class="col col-md-12 table-container">
+			<table class="display-data-table" id="displayTable">
+			<thead>
+				<tr>
+				<th>sr. no</th>
+				<th>Employee Id</th>
+				<th>Name</th>
+				<th>Bank Name</th>
+				<th>Account Number</th>
+				<th>IFSC </th>
+				<th>Actions</th>
+				
+				
+				
+			</tr>
+			</thead>
+			<tbody>
+			{% set count = 0 %}
+			{% for account in accounts %}
+				{% set count = count + 1 %}
+       			 <tr>
+       			 	<td>{{ count }}</td>
+       			 	<td>{{ account.employeeId }}</td>
+       			 	<td>{{ account.employeeName}} </td>
+       			 	<td>{{ account.bankName}} </td>
+       			 	<td>{{ account.accountNumber}} </td>
+       			 	<td>{{ account.ifscCode}} </td>
+
+       			 	<td><button class="button-form-type edit-account"   data-id="{{account.id}}">Edit</button> <button data-toggle="modal" data-target="#deleteModal"  data-id="{{account.id}}" class="button-form-type-danger  delete-account-details">Delete</button></td>
+       			 	
+       			 </tr>
+   			 {% endfor %}
+			
+			</tbody>
+		</table>
+
+			<!-- Delete Modal -->	
+			 	<div id="deleteModal" class="modal fade" role="dialog">
+			  <div class="modal-dialog">
+
+			    <!-- Modal content-->
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        <h4 class="modal-title">Delete this Account details</h4>
+			      </div>
+			      <div class="modal-body">
+			        <p>This Account Details  will be Deleted.</p>
+			      </div>
+			      <div class="modal-footer">
+			      	<button type="button" class="btn button-primary delete-account-details-confirm form-submit" data-dismiss="modal" >delete</button>
+			        <button type="button" class="btn button-primary-danger " data-dismiss="modal">close</button>
+			      </div>
+			    </div>
+
+			  </div>
+			</div>
+	</div>
+	
+				
+	
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		var salaryAcId="";
+			$('.edit-account').click(function(){
+				salaryAcId=$(this).attr("data-id");
+				window.location= location.origin + "/auth/edit-salaryAccount?salaryAcId="+salaryAcId;
+			});
+			
+			$('.delete-account-details').click(function(){
+				salaryAcId=$(this).attr("data-id");
+			});
+			$('.delete-account-details-confirm').click(function(){
+				var Url=location.origin + "/auth/delete-account-details-confirm/"+salaryAcId;
+		        	$.ajax({url: Url, success: function(result){
+		        		
+		    			}});
+		        	setTimeout(function(){ 
+		        		location.reload();
+		        }, 500);
+			});
+
+			$('.add-new-account').click(function(){
+				
+				window.location= location.origin + "/auth/add-new-salaryAccount";
+			});
+			
+
+	});
+
+</script>
+{% endblock %}

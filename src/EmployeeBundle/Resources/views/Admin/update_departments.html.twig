@@ -1,6 +1,6 @@
 {% extends "EmployeeBundle:layout:layout-admin.html.twig" %}
 
-
+{% block title %}Department{% endblock %}
 {% block body %}
 <div class="row top-container">
 	<div class=" top-header">
@@ -10,12 +10,21 @@
 			<button class="button-primary add-new-department">Add New</button>
 		</div>
 		<div class="col col-md-12 table-container">
+			{% if message %}
+				<div class="message-wrapper col col-md-8 ">
+					<div>{{message}}</div>
+				</div>
+			{% elseif errormessage %}
+				<div class="error-message-wrapper col col-md-8 ">
+					<div>{{errormessage}}</div>
+				</div>
+			{% endif %}
 			<table class="display-assets-table" id="displayTable">
 			<thead>
 				<tr>
 				<th>sr. no</th>
 				<th>departmentName</th>
-				<th>departmentRole</th>
+				
 				<th>departmentHead</th>
 				<th>Action</th>
 			</tr>
@@ -27,9 +36,9 @@
        			 <tr>
        			 	<td>{{ count }}</td>
        			 	<td>{{ department.departmentName }}</td>
-       			 	<td>{{ department.departmentRole }} </td>
+       			 
        			 	<td>{{ department.departmentHead }}</td>
-       			 	<td><button class="button-form-type change-department"  data-id="{{department.id}}">update</button> <button data-toggle="modal" data-target="#delete"   data-id="{{department.id}}" class="button-form-type-danger delete-department">Delete</button></td>
+       			 	<td><button class="button-form-type update-department-single"  data-id="{{department.id}}">update</button> <button data-toggle="modal" data-target="#delete"   data-id="{{department.id}}" class="button-form-type-danger delete-department">Delete</button></td>
        			 	
        			 </tr>
    			 {% endfor %}
@@ -37,7 +46,7 @@
 			</tbody>
 		</table>
 
-			<!-- Reject Modal -->	
+			<!-- Delete Modal -->	
 			 	<div id="delete" class="modal fade" role="dialog">
 			  <div class="modal-dialog">
 
@@ -67,9 +76,24 @@
 
 <script type="text/javascript">
 	$(document).ready(function () {
+		var depId ="";
 		$('.add-new-department').click(function(){
 				window.location = location.origin + "/admin/add-new-department"
 			});
+		$('.update-department-single').click(function(){
+			 depId = $(this).attr("data-id");
+				window.location = location.origin + "/admin/update-department/"+depId;
+			});
+		
+		$('.delete-department').click(function(){
+			 depId = $(this).attr("data-id");
+				
+			});
+		$('.delete-department-confirm').click(function(){
+				window.location = location.origin + "/admin/delete-department/"+depId;
+			});
+		
+		
 		
 	});
 	</script>

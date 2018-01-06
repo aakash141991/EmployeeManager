@@ -36,11 +36,20 @@ class EmployeeLeave
 
     
      /**
-     * @var string
-     *
-     * @ORM\Column(name="leaveType", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="LeaveTypes", inversedBy="employeeLeaves")
+     * @ORM\JoinColumn(nullable=true,onDelete="SET NULL")
      */
-    private $leaveType;
+    private $leaveTypes;
+
+      public function getleaveTypes()
+    {
+        return $this->leaveTypes;
+    }
+
+    public function setleaveTypes(LeaveTypes $leavetype)
+    {
+        $this->leaveTypes = $leavetype;
+    }
 
     /**
      * @var int
@@ -172,29 +181,7 @@ class EmployeeLeave
         return $this->employeeName;
     }
 
-    /**
-     * Set leaveType
-     *
-     * @param string $leaveType
-     *
-     * @return EmployeeLeave
-     */
-    public function setLeaveType($leaveType)
-    {
-        $this->leaveType = $leaveType;
-
-        return $this;
-    }
-
-    /**
-     * Get leaveType
-     *
-     * @return string
-     */
-    public function getLeaveType()
-    {
-        return $this->leaveType;
-    }
+   
 
     /**
      * Set numberOfDays
